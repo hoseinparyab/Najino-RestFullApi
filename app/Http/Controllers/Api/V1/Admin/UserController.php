@@ -111,6 +111,17 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+        } catch (\throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return response()->json([
+                'message' => 'something is wrong try again later! ',
+            ], 500);
+        }
+
+        return response()->json([
+            'messages' => 'user deleted successfully',
+        ], 200);
     }
 }
