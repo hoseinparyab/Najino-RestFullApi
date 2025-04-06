@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug','100');
             $table->text('body');
             $table->string('image');
+            $table->integer('view')->default('0');
             $table->timestamps();
             $table->softDeletes();
         });

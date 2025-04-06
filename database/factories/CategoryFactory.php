@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -18,10 +16,11 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->unique()->word();
         return [
-            'name' => fake()->Name(),
-            'slug' => fake()->slug(),
-
+            'name' => $name,
+            'slug' => str($name)->slug(),
+            'parent_id' => 0,
         ];
     }
 }
