@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Base\traits\HasRules;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,SoftDeletes;
+    use HasFactory, Notifiable,SoftDeletes,HasRules;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +45,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+        ];
+    }
+    public function rules(): array
+    {
+        return [
+            'first_name' => ['required', 'string', 'min:1', 'max:255'],
+            'last_name'  => ['required', 'string', 'min:1', 'max:255'],
+            'email'      => ['required', 'email', 'unique:users,email', Rule::unique('users', 'email')->ignore($this->id)],
+            'password'   => ['nullable', 'string', 'min:8', 'max:255'],
         ];
     }
 }

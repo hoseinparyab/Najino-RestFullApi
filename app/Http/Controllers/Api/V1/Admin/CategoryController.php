@@ -4,54 +4,43 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\User;
-use Illuminate\Contracts\Debug\ExceptionHandler;
+use App\RestfulApi\Facades\ApiResponse;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    public function __construct(private CategoryService $categoryService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::paginate(10);
-        return response()->json([
-            'data' => $categories
-        ]);
+        $result = $this->categoryService->getAllCategories($request->all());
+
+        if (!$result->ok) {
+            return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
+        }
+
+        return ApiResponse::withData($result->data)->build()->response();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryStoreApiRequest $request)
+
     {
-        try {
-            $validator = \Illuminate\Support\Facades\Validator::make($request->all(),
-                [
-                    'name' => ['required', 'string', 'min:1', 'max:255'],
-                    'parent_id' => ['nullable', 'integer', ],
+        $result = $this->categoryService->createCategory($request->validated());
 
-                ]);
-            if ($validator->fails()) {
-                return response()->json([
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-            $inputs = $validator->validated();
-            $category = Category::create([
-                'name' => $inputs['name'],
-                'parent_id' => $inputs['parent_id']
-            ]);
-
-        } catch (\Throwable $th) {
-            app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
+        if (!$result->ok) {
+            return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withMessage('category created successfully')->withData($category)->build()->response();
+        return ApiResponse::withMessage('Category created successfully')->withData($result->data)->build()->response();
     }
 
     /**
@@ -59,50 +48,39 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return Response()->json([
-            'data' => $category
-        ]);
+        $result = $this->categoryService->getCategoryInfo($category);
+
+        if (!$result->ok) {
+            return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
+        }
+
+        return ApiResponse::withData($result->data)->build()->response();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryUpdateApiRequest $request, Category $category)
     {
-        try {
-            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                'name' => ['required', 'string', 'min:1', 'max:255'],
-                'parent_id' => ['nullable', 'integer'],
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
-
-            $category->update($validator->validated());
-
-        } catch (\Throwable $th) {
-            app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
+        $result = $this->categoryService->updateCategory($request->validated(), $category);
+        if (!$result->ok) {
+            return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withMessage('category updated successfully')->withData($category)->build()->response();
+        return ApiResponse::withMessage('Category updated successfully')->withData($result->data)->build()->response();
     }
-
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Category $category)
     {
-        try {
-            $category->delete();
-        } catch (\throwable $th) {
-            app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
+        $result = $this->categoryService->deleteCategory($category);
+
+        if (!$result->ok) {
+            return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withMessage('category deleted successfully')->withStatus(200)->build()->response();
+        return ApiResponse::withMessage('Category deleted successfully')->withStatus(200)->build()->response();
     }
-
 }
