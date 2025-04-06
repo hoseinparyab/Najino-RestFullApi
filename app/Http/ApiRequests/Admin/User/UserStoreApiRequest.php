@@ -1,15 +1,18 @@
 <?php
 namespace App\Http\ApiRequests\Admin\User;
 
-use App\RestfulApi\ApiFormRequest;
 use App\Models\User;
-class UserStoreRequest extends ApiFormRequest
+use App\RestfulApi\ApiFormRequest;
+// use Illuminate\Support\Facades\Gate;
+
+class UserStoreApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
+        // return Gate::allows('create_user');
         return true;
     }
 
@@ -20,7 +23,6 @@ class UserStoreRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-
         return User::rules();
     }
 }

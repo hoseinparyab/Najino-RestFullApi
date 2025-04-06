@@ -47,13 +47,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function rules(): array
-    {
-        return [
-            'first_name' => ['required', 'string', 'min:1', 'max:255'],
-            'last_name'  => ['required', 'string', 'min:1', 'max:255'],
-            'email'      => ['required', 'email', 'unique:users,email', Rule::unique('users', 'email')->ignore($this->id)],
-            'password'   => ['nullable', 'string', 'min:8', 'max:255'],
-        ];
-    }
+    protected static $rules = [
+        'first_name' => ['required', 'string', 'min:1', 'max:255'],
+        'last_name' => ['required', 'string', 'min:1', 'max:255'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'string', 'min:8', 'max:255'],
+    ];
+
 }

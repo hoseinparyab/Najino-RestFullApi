@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Base\traits\HasRules;
+
 class Category extends Model
 {
-    use Sluggable, HasFactory, SoftDeletes,HasRules;
+        use Sluggable, HasFactory, SoftDeletes,HasRules;
     protected $fillable = [
         'name',
         'parent_id',
@@ -71,11 +72,9 @@ class Category extends Model
     {
         return Article::query()->where('category_id', $category_id)->count();
     }
-    public function rules(): array
-    {
-        return [
-            'name' => ['required', 'string', 'min:1', 'max:255'],
-            'parent_id' => ['nullable', 'integer'],
-        ];
-    }
+
+    protected static $rules = [
+        'name'      => ['required', 'string', 'min:1', 'max:255'],
+        'parent_id' => ['nullable', 'integer'],
+    ];
 }

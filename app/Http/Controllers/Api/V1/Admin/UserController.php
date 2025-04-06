@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\ApiRequests\Admin\User\UserDeleteApiRequest;
 use App\Http\ApiRequests\Admin\User\UserIndexApiRequest;
@@ -20,7 +20,7 @@ class UserController extends Controller
     {
     }
 
- 
+
     public function index(UserIndexApiRequest $request)
     {
         $result = $this->userService->getAllUsers($request->all());

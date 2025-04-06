@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\RestfulApi\ApiResponseBuilder;
 use Illuminate\Support\ServiceProvider;
 
 class RestfulApiServiceProvider extends ServiceProvider

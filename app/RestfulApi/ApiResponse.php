@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RestfullApi;
+namespace App\RestfulApi;
 
 class ApiResponse
 {
@@ -15,6 +15,11 @@ class ApiResponse
     }
     public function setData(mixed $data) : self {
         $this->data = $data;
+        return $this;
+    }
+
+    public function setStatus(int $status) : self {
+        $this->status = $status;
         return $this;
     }
 

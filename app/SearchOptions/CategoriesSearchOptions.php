@@ -1,26 +1,26 @@
 <?php
-namespace App\SearchOptions;
+// namespace App\SearchOptions;
 
-use App\Base\SearchOptions;
+// use App\Base\SearchOptions;
 
-class CategoriesSearchOptions extends SearchOptions
-{
-    public function __construct()
-    {
-        $this->searchableFields = [
-            'name',
-            'slug'
-        ];
+// class CategoriesSearchOptions extends SearchOptions
+// {
+//     public function __construct()
+//     {
+//         $this->searchableFields = [
+//             'name',
+//             'slug'
+//         ];
 
-        $this->sortableFields = [
-            'id',
-            'name',
-            'created_at',
-            'updated_at'
-        ];
+//         $this->sortableFields = [
+//             'id',
+//             'name',
+//             'created_at',
+//             'updated_at'
+//         ];
 
-        $this->filterableFields = [
-            'parent_id'
-        ];
-    }
-}
+//         $this->filterableFields = [
+//             'parent_id'
+//         ];
+//     }
+// }

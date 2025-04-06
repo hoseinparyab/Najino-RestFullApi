@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RestfullApi;
+namespace App\RestfulApi;
 
 class ApiResponseBuilder {
 

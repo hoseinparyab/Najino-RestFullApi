@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\RestfulApi\Facades\ApiResponse;
 use App\Services\CategoryService;
+use App\Http\ApiRequests\Admin\Category\CategoryStoreApiRequest;
+use App\Http\ApiRequests\Admin\Category\CategoryUpdateApiRequest;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller

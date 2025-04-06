@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\ApiRequests\Admin\Category;
+namespace App\Http\ApiRequests\Admin\User;
 
-use App\Models\Category;
-use App\RestfulApi\ApiFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CategoryStoreApiRequest extends ApiFormRequest
+class UserIndexApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +21,10 @@ class CategoryStoreApiRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        return Category::rules();
+        return [
+            'search' => 'nullable|string',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page' => 'nullable|integer|min:1',
+        ];
     }
 }
