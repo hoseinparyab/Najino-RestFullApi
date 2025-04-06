@@ -48,15 +48,10 @@ class CategoryController extends Controller
 
         } catch (\Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json([
-                'message' => 'something is wrong try again later! ',
-            ], 500);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
 
-        return response()->json([
-            'message' => 'category created successfully',
-            'data' => $category
-        ], 200);
+        return ApiResponse::withMessage('category created successfully')->withData($category)->build()->response();
     }
 
     /**
@@ -88,13 +83,10 @@ class CategoryController extends Controller
 
         } catch (\Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json(['message' => 'Something went wrong!'], 500);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
 
-        return response()->json([
-            'message' => 'Category updated successfully',
-            'data' => $category
-        ], 200);
+        return ApiResponse::withMessage('category updated successfully')->withData($category)->build()->response();
     }
 
 
@@ -107,14 +99,10 @@ class CategoryController extends Controller
             $category->delete();
         } catch (\throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json([
-                'message' => 'something is wrong try again later! ',
-            ], 500);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
 
-        return response()->json([
-            'messages' => 'user deleted successfully',
-        ], 200);
+        return ApiResponse::withMessage('category deleted successfully')->withStatus(200)->build()->response();
     }
 
 }

@@ -47,15 +47,9 @@ class UserController extends Controller
 
         } catch (\throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json([
-                'message' => 'something is wrong try again later! ',
-            ], 500);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        return response()->json([
-            'messages' => 'user created successfully',
-            'data' => $user
-        ], 200);
+        return ApiResponse::withMessage('user created successfully')->withData($user)->build()->response();
     }
 
     /**
@@ -95,15 +89,9 @@ class UserController extends Controller
 
         } catch (\throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json([
-                'message' => 'something is wrong try again later! ',
-            ], 500);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        return response()->json([
-            'messages' => 'user updated successfully',
-            'data' => $user
-        ], 200);
+        return ApiResponse::withMessage('user updated successfully')->withData($user)->build()->response();
     }
 
     /**
@@ -115,13 +103,9 @@ class UserController extends Controller
             $user->delete();
         } catch (\throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return response()->json([
-                'message' => 'something is wrong try again later! ',
-            ], 500);
+             return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        return response()->json([
-            'messages' => 'user deleted successfully',
-        ], 200);
+        return ApiResponse::withMessage('user deleted successfully')->withStatus(200)->build()->response();
     }
+
 }

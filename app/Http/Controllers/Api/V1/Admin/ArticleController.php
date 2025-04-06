@@ -8,6 +8,9 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Exception;
+use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class ArticleController extends Controller
 {
@@ -16,14 +19,20 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::with(['user', 'category'])
-            ->latest()
-            ->paginate(10);
+        try {
+            $articles = Article::with(['user', 'category'])
+                ->latest()
+                ->paginate(10);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $articles
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => $articles
+            ]);
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            $apiResponse = new ApiResponseBuilder();
+            return $apiResponse->withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
+        }
     }
 
     /**
@@ -31,32 +40,35 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'body' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'category_id' => 'required|exists:categories,id',
+                'body' => 'required|string',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/articles', $imageName);
-            $validated['image'] = 'articles/' . $imageName;
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/articles', $imageName);
+                $validated['image'] = 'articles/' . $imageName;
+            }
+
+            $validated['user_id'] = auth()->id();
+            $validated['slug'] = Str::slug($request->title);
+            $validated['view'] = 0;
+
+            $article = Article::create($validated);
+
+            $apiResponse = new ApiResponseBuilder();
+            return $apiResponse->withMessage('Article created successfully')->withData($article)->build()->response();
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            $apiResponse = new ApiResponseBuilder();
+            return $apiResponse->withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        $validated['user_id'] = auth()->id();
-        $validated['slug'] = Str::slug($request->title);
-        $validated['view'] = 0;
-
-        $article = Article::create($validated);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Article created successfully',
-            'data' => $article
-        ], 201);
     }
 
     /**
@@ -64,12 +76,17 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        $article->load(['user', 'category']);
+        try {
+            $article->load(['user', 'category']);
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $article
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => $article
+            ]);
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
+        }
     }
 
     /**
@@ -77,37 +94,38 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'category_id' => 'sometimes|required|exists:categories,id',
-            'body' => 'sometimes|required|string',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'sometimes|required|string|max:255',
+                'category_id' => 'sometimes|required|exists:categories,id',
+                'body' => 'sometimes|required|string',
+                'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        // Handle image upload if new image is provided
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($article->image) {
-                Storage::delete('public/' . $article->image);
+            // Handle image upload if new image is provided
+            if ($request->hasFile('image')) {
+                // Delete old image
+                if ($article->image) {
+                    Storage::delete('public/' . $article->image);
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/articles', $imageName);
+                $validated['image'] = 'articles/' . $imageName;
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/articles', $imageName);
-            $validated['image'] = 'articles/' . $imageName;
+            if (isset($validated['title'])) {
+                $validated['slug'] = Str::slug($validated['title']);
+            }
+
+            $article->update($validated);
+
+            return ApiResponse::withMessage('Article updated successfully')->withData($article)->build()->response();
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        if (isset($validated['title'])) {
-            $validated['slug'] = Str::slug($validated['title']);
-        }
-
-        $article->update($validated);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Article updated successfully',
-            'data' => $article
-        ]);
     }
 
     /**
@@ -115,16 +133,18 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        // Delete associated image
-        if ($article->image) {
-            Storage::delete('public/' . $article->image);
+        try {
+            // Delete associated image
+            if ($article->image) {
+                Storage::delete('public/' . $article->image);
+            }
+
+            $article->delete();
+
+            return ApiResponse::withMessage('Article deleted successfully')->withStatus(200)->build()->response();
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return ApiResponse::withMessage('something is wrong try again later! ')->withStatus(500)->build()->response();
         }
-
-        $article->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Article deleted successfully'
-        ]);
     }
 }
