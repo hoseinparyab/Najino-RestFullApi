@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Base\traits\HasRules;
+use Laravel\Sanctum\HasApiTokens;
+use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,SoftDeletes,HasRules;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRules, Searchable;
 
     /**
      * The attributes that are mass assignable.

@@ -6,6 +6,7 @@ use App\Http\ApiRequests\Admin\User\UserIndexApiRequest;
 use App\Http\ApiRequests\Admin\User\UserShowApiRequest;
 use App\Http\ApiRequests\Admin\User\UserStoreApiRequest;
 use App\Http\ApiRequests\Admin\User\UserUpdateApiRequest;
+use App\SearchOptions\UsersSearchOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserDetailsApiResource;
 use App\Http\Resources\Admin\User\UsersListApiResource;

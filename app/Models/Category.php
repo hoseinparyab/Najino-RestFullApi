@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Base\traits\HasRules;
+use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
 
 class Category extends Model
 {
-        use Sluggable, HasFactory, SoftDeletes,HasRules;
+    use Sluggable, HasFactory, SoftDeletes, HasRules, Searchable;
+
     protected $fillable = [
         'name',
         'parent_id',

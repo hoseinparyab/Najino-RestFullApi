@@ -1,26 +1,24 @@
 <?php
-// namespace App\SearchOptions;
+namespace App\SearchOptions;
 
-// use App\Base\SearchOptions;
+use Amirhosseinabd\LaravelEasySearch\Concerns\MultipleSearchOptions;
 
-// class CategoriesSearchOptions extends SearchOptions
-// {
-//     public function __construct()
-//     {
-//         $this->searchableFields = [
-//             'name',
-//             'slug'
-//         ];
+class CategoriesSearchOptions implements MultipleSearchOptions
+{
+        public function columns(): array
+    {
+        return [
+            'name',
+            'slug'
+        ];
+    }
 
-//         $this->sortableFields = [
-//             'id',
-//             'name',
-//             'created_at',
-//             'updated_at'
-//         ];
+    public function inputNames(): array
+    {
+        return [
+            'name' => 'name',
+            'slug' => 'slug'
+        ];
+    }
+}
 
-//         $this->filterableFields = [
-//             'parent_id'
-//         ];
-//     }
-// }

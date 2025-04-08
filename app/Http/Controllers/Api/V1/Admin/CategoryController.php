@@ -8,6 +8,8 @@ use App\RestfulApi\Facades\ApiResponse;
 use App\Services\CategoryService;
 use App\Http\ApiRequests\Admin\Category\CategoryStoreApiRequest;
 use App\Http\ApiRequests\Admin\Category\CategoryUpdateApiRequest;
+use App\Http\Resources\Admin\Category\CategoriesListApiResource;
+use App\Http\Resources\Admin\Category\CategoryDetailsApiResource;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -27,14 +29,13 @@ class CategoryController extends Controller
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withData($result->data)->build()->response();
+        return ApiResponse::withData(CategoriesListApiResource::collection($result->data))->build()->response();
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(CategoryStoreApiRequest $request)
-
     {
         $result = $this->categoryService->createCategory($request->validated());
 
@@ -42,7 +43,10 @@ class CategoryController extends Controller
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withMessage('Category created successfully')->withData($result->data)->build()->response();
+        return ApiResponse::withMessage('Category created successfully')
+            ->withData(new CategoryDetailsApiResource($result->data))
+            ->build()
+            ->response();
     }
 
     /**
@@ -56,7 +60,7 @@ class CategoryController extends Controller
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withData($result->data)->build()->response();
+        return ApiResponse::withData(new CategoryDetailsApiResource($result->data))->build()->response();
     }
 
     /**
@@ -69,7 +73,10 @@ class CategoryController extends Controller
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
-        return ApiResponse::withMessage('Category updated successfully')->withData($result->data)->build()->response();
+        return ApiResponse::withMessage('Category updated successfully')
+            ->withData(new CategoryDetailsApiResource($result->data))
+            ->build()
+            ->response();
     }
 
     /**

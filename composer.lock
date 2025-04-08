@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fce7caba513bc48e2d6d27b18de624f",
+    "content-hash": "0bfc633dc5e03a0b4b7ce1ae4f3ce1c5",
     "packages": [
+        {
+            "name": "amirhosseinabd/laravel-easy-search",
+            "version": "1.0.0-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amirhosseinabd/laravel-easy-search.git",
+                "reference": "a648b030d22b4a23444251b6f4cd6fb9b2958d30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amirhosseinabd/laravel-easy-search/zipball/a648b030d22b4a23444251b6f4cd6fb9b2958d30",
+                "reference": "a648b030d22b4a23444251b6f4cd6fb9b2958d30",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Amirhosseinabd\\LaravelEasySearch\\LaravelEasySearchServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Amirhosseinabd\\LaravelEasySearch\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Amirhossein Abdollahzadeh",
+                    "email": "amirhosseinab.dev@gmail.com"
+                }
+            ],
+            "description": "Easy search in laravel",
+            "keywords": [
+                "Laravel Search",
+                "eloquent",
+                "eloquent search",
+                "eloquent-search",
+                "laravel",
+                "laravel-search"
+            ],
+            "support": {
+                "issues": "https://github.com/amirhosseinabd/laravel-easy-search/issues",
+                "source": "https://github.com/amirhosseinabd/laravel-easy-search/tree/1.0.0-beta"
+            },
+            "time": "2024-02-20T13:38:17+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.12.3",
@@ -8345,7 +8400,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "amirhosseinabd/laravel-easy-search": 10
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
