@@ -13,60 +13,60 @@ use App\Http\Resources\Admin\Article\ArticleDetailsApiResource;
 use App\Http\Resources\Admin\Article\ArticlesListApiResource;
 use App\Services\ArticleService;
 use App\RestfulApi\Facades\ApiResponse;
-use App\Http\Requests\Admin\Article\StoreArticleRequest;
-use App\Http\Requests\Admin\Article\UpdateArticleRequest;
+use App\Http\ApiRequests\Admin\Article\ArticleStoreApiRequest;
+use App\Http\ApiRequests\Admin\Article\ArticleUpdateApiRequest;
+use App\Http\ApiRequests\Admin\Article\ArticleIndexApiRequest;
 use Exception;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class ArticleController extends Controller
 {
+    protected ArticleService $articleService;
+
+    public function __construct(ArticleService $articleService)
+    {
+        $this->articleService = $articleService;
+    }
+
     /**
      * Display a listing of the articles.
      */
-    public function index()
+    public function index(ArticleIndexApiRequest $request)
     {
         try {
-            $articles = Article::with(['user', 'category'])
-                ->latest()
-                ->paginate(10);
+            $result = $this->articleService->getAllArticles($request->validated());
 
-            return ApiResponse::withData(ArticlesListApiResource::collection($articles))->build()->response();
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to fetch articles')->withStatus(500)->build()->response();
+            }
+
+            return ApiResponse::withData(ArticlesListApiResource::collection($result->data))->build()->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later!')->withStatus(500)->build()->response();
+            return ApiResponse::withMessage('Something went wrong, please try again later!')->withStatus(500)->build()->response();
         }
     }
 
     /**
      * Store a newly created article in storage.
      */
-    public function store(StoreArticleRequest $request)
+    public function store(ArticleStoreApiRequest $request)
     {
         try {
-            $validated = $request->validated();
+            $result = $this->articleService->createArticle($request->validated());
 
-            // Handle image upload
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/articles', $imageName);
-                $validated['image'] = 'articles/' . $imageName;
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to create article')->withStatus(500)->build()->response();
             }
 
-            $validated['user_id'] = auth()->id();
-            $validated['slug'] = Str::slug($request->title);
-            $validated['view'] = 0;
-
-            $article = Article::create($validated);
-
             return ApiResponse::withMessage('Article created successfully')
-                ->withData(new ArticleDetailsApiResource($article))
+                ->withData(new ArticleDetailsApiResource($result->data))
                 ->build()
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later!')->withStatus(500)->build()->response();
+            return ApiResponse::withMessage('Something went wrong, please try again later!')->withStatus(500)->build()->response();
         }
     }
 
@@ -76,49 +76,38 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         try {
-            $article->load(['user', 'category']);
+            $result = $this->articleService->getArticleInfo($article);
 
-            return ApiResponse::withData(new ArticleDetailsApiResource($article))->build()->response();
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to fetch article')->withStatus(500)->build()->response();
+            }
+
+            return ApiResponse::withData(new ArticleDetailsApiResource($result->data))->build()->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later!')->withStatus(500)->build()->response();
+            return ApiResponse::withMessage('Something went wrong, please try again later!')->withStatus(500)->build()->response();
         }
     }
 
     /**
      * Update the specified article in storage.
      */
-    public function update(UpdateArticleRequest $request, Article $article)
+    public function update(ArticleUpdateApiRequest $request, Article $article)
     {
         try {
-            $validated = $request->validated();
+            $result = $this->articleService->updateArticle($request->validated(), $article);
 
-            // Handle image upload if new image is provided
-            if ($request->hasFile('image')) {
-                // Delete old image
-                if ($article->image) {
-                    Storage::delete('public/' . $article->image);
-                }
-
-                $image = $request->file('image');
-                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/articles', $imageName);
-                $validated['image'] = 'articles/' . $imageName;
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to update article')->withStatus(500)->build()->response();
             }
-
-            if (isset($validated['title'])) {
-                $validated['slug'] = Str::slug($validated['title']);
-            }
-
-            $article->update($validated);
 
             return ApiResponse::withMessage('Article updated successfully')
-                ->withData(new ArticleDetailsApiResource($article))
+                ->withData(new ArticleDetailsApiResource($result->data))
                 ->build()
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later!')->withStatus(500)->build()->response();
+            return ApiResponse::withMessage('Something went wrong, please try again later!')->withStatus(500)->build()->response();
         }
     }
 
@@ -128,17 +117,16 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         try {
-            // Delete associated image
-            if ($article->image) {
-                Storage::delete('public/' . $article->image);
-            }
+            $result = $this->articleService->deleteArticle($article);
 
-            $article->delete();
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to delete article')->withStatus(500)->build()->response();
+            }
 
             return ApiResponse::withMessage('Article deleted successfully')->withStatus(200)->build()->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
-            return ApiResponse::withMessage('something is wrong try again later!')->withStatus(500)->build()->response();
+            return ApiResponse::withMessage('Something went wrong, please try again later!')->withStatus(500)->build()->response();
         }
     }
 }
