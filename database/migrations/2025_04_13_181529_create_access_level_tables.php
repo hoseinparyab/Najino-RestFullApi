@@ -14,32 +14,37 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('display_name')->nullable();
+            $table->string('display_name');
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('role_user', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
+
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('no action');
+            $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('no action');
+
+            $table->primary(['user_id', 'role_id']);
         });
 
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('display_name')->nullable();
+            $table->string('display_name');
             $table->softDeletes();
             $table->timestamps();
         });
 
-        Schema::create('role_permissions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('role_id')->constrained('roles');
-            $table->foreignId('permission_id')->constrained('permissions');
-            $table->timestamps();
-        });
-
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('no action');
+            $table->unsignedBigInteger('permission_id');
+
             $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('no action');
-            $table->primary(['user_id', 'role_id']);
+            $table->foreign('permission_id')->references('id')->on('permissions')->onUpdate('cascade')->onDelete('no action');
+
+            $table->primary(['role_id', 'permission_id']);
         });
     }
 
@@ -48,9 +53,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('permission_role');
         Schema::dropIfExists('permissions');
-        Schema::dropIfExists('role_permissions');
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('roles');
     }
 };
