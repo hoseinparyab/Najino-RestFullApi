@@ -3,7 +3,7 @@ namespace App\Http\ApiRequests\Admin\User;
 
 use App\Models\User;
 use App\RestfulApi\ApiFormRequest;
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 
 class UserStoreApiRequest extends ApiFormRequest
 {
@@ -12,8 +12,8 @@ class UserStoreApiRequest extends ApiFormRequest
      */
     public function authorize(): bool
     {
-        // return Gate::allows('create_user');
-        return true;
+        return Gate::allows('create_user');
+
     }
 
     /**
