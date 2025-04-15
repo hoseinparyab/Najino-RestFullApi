@@ -4,7 +4,7 @@ namespace App\Http\ApiRequests\Admin\Article;
 
 use App\Models\Article;
 use App\RestfulApi\ApiFormRequest;
-
+use Illuminate\Support\Facades\Gate;
 class ArticleUpdateApiRequest extends ApiFormRequest
 {
     /**
@@ -12,7 +12,7 @@ class ArticleUpdateApiRequest extends ApiFormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('article_update');
     }
 
     /**

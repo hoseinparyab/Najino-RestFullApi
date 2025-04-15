@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\ApiRequests\Admin\Article;
+namespace App\Http\ApiRequests\Admin\Role;
 
-use App\Models\Article;
 use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
-class ArticleStoreApiRequest extends ApiFormRequest
+class RoleDestroyApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('article_create');
+        return Gate::allows('role_delete');
     }
 
     /**
@@ -22,6 +21,8 @@ class ArticleStoreApiRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        return Article::rules();
+        return [
+
+        ];
     }
 }

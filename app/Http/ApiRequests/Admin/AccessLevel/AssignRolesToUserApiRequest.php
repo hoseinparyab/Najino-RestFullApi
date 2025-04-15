@@ -1,18 +1,16 @@
 <?php
+namespace App\Http\ApiRequests\Admin\AccessLevel;
 
-namespace App\Http\ApiRequests\Admin\Article;
-
-use App\Models\Article;
 use App\RestfulApi\ApiFormRequest;
-use Illuminate\Support\Facades\Gate;
-class ArticleStoreApiRequest extends ApiFormRequest
+
+class AssignRolesToUserApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('article_create');
+            return true;
     }
 
     /**
@@ -22,6 +20,9 @@ class ArticleStoreApiRequest extends ApiFormRequest
      */
     public function rules(): array
     {
-        return Article::rules();
+        return [
+            'roles'   => 'required|array', //TODO: check if the role is exists
+            'roles.*' => 'exists:roles,id', //TODO: check if the role is exists
+        ];
     }
 }

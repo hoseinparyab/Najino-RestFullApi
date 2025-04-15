@@ -3,7 +3,7 @@ namespace App\Http\ApiRequests\Admin\Category;
 
 use App\Models\Category;
 use App\RestfulApi\ApiFormRequest;
-
+use Illuminate\Support\Facades\Gate;
 class CategoryUpdateApiRequest extends ApiFormRequest
 {
     /**
@@ -11,7 +11,7 @@ class CategoryUpdateApiRequest extends ApiFormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('category_update');
     }
 
     /**

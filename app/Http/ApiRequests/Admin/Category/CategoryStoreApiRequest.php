@@ -12,7 +12,7 @@ class CategoryStoreApiRequest extends ApiFormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('category_create');
     }
 
     /**
