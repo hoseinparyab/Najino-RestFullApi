@@ -16,7 +16,7 @@ class PermissionSeeder extends Seeder
             'name' => 'user_read',
             'display_name' => 'User Read',
         ])->create();
-
+            
         Permission::factory()->state([
             'name' => 'user_create',
             'display_name' => 'User Create',

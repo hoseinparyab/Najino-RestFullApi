@@ -56,5 +56,13 @@ class User extends Authenticatable
         'email' => ['required', 'email', 'unique:users,email'],
         'password' => ['required', 'string', 'min:8', 'max:255'],
     ];
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 }

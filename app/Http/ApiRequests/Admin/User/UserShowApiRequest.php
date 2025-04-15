@@ -2,10 +2,9 @@
 
 namespace App\Http\ApiRequests\Admin\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
-
-class UserIndexApiRequest extends FormRequest
+class UserShowApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +22,7 @@ class UserIndexApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => 'nullable|string',
-            'per_page' => 'nullable|integer|min:1|max:100',
-            'page' => 'nullable|integer|min:1',
+
         ];
     }
 }

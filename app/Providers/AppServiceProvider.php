@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::define('create_user', function ($user) {
             return $user->email === 'admin@gmail.com';
+        });
+
+        Permission::with('roles')->each(function ($permission) {
+            Gate::define($permission->name, function ($user) use ($permission) {
+                return !!$permission->roles->intersect($user->roles)->count() ;
+            });
         });
     }
 }

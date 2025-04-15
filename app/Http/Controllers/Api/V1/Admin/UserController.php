@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\V1\Admin;
 
-use App\Http\ApiRequests\Admin\User\UserDeleteApiRequest;
+use App\Http\ApiRequests\Admin\User\UserDestroyApiRequest;
 use App\Http\ApiRequests\Admin\User\UserIndexApiRequest;
 use App\Http\ApiRequests\Admin\User\UserShowApiRequest;
 use App\Http\ApiRequests\Admin\User\UserStoreApiRequest;
@@ -73,7 +73,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserDeleteApiRequest $request, User $user)
+    public function destroy(UserDestroyApiRequest $request, User $user)
     {
         $result = $this->userService->deleteUser($user);
 

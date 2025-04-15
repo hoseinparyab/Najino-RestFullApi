@@ -2,17 +2,16 @@
 
 namespace App\Http\ApiRequests\Admin\User;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
-
-class UserIndexApiRequest extends FormRequest
+class UserDestroyApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('user_read');
+        return Gate::allows('user_delete');
     }
 
     /**
@@ -23,9 +22,7 @@ class UserIndexApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => 'nullable|string',
-            'per_page' => 'nullable|integer|min:1|max:100',
-            'page' => 'nullable|integer|min:1',
+
         ];
     }
 }
