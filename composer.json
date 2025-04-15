@@ -12,6 +12,7 @@
         "php": "^8.2",
         "amirhosseinabd/laravel-easy-search": "1.0.0-beta",
         "cviebrock/eloquent-sluggable": "^12.0",
+        "laravel-lang/common": "^6.7",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.7",
