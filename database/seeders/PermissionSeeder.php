@@ -91,5 +91,22 @@ class PermissionSeeder extends Seeder
             'name' => 'article_delete',
             'display_name' => 'Article Delete',
         ])->create();
+
+        Permission::factory()->state([
+            'name' => 'comment_approve',
+            'display_name' => 'Comment Approve',
+        ])->create();
+
+        Permission::factory()->state([
+            'name' => 'comment_pending',
+            'display_name' => 'Comment Pending',
+        ])->create();
+
+        Permission::factory()->state([
+            'name' => 'comment_delete',
+            'display_name' => 'Comment Delete',
+        ])->create();
+
+
     }
 }
