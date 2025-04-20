@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Article;
+namespace App\Http\ApiRequests\Auth;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\RestfulApi\ApiFormRequest;
 
-class BaseArticleRequest extends FormRequest
+class LoginApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class BaseArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'body' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email'    => 'required|email',
+            'password' => 'required',
         ];
     }
 }

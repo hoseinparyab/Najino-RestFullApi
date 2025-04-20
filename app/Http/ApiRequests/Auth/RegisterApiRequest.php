@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\ApiRequests\Admin\Auth;
+namespace App\Http\ApiRequests\Auth;
 
 use App\RestfulApi\ApiFormRequest;
 
-class LoginApiRequest extends ApiFormRequest
+class RegisterApiRequest extends ApiFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class LoginApiRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required',
-            
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ];
     }
 }
