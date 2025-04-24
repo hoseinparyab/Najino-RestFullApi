@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CommentRequest;
+use App\Http\ApiRequests\Comment\CommentStoreApiRequest;
+use App\Http\ApiRequests\Comment\CommentApproveApiRequest;
 use App\Services\CommentService;
 use Illuminate\Http\JsonResponse;
 use App\Models\Comment;
@@ -17,7 +18,7 @@ class CommentController extends Controller
         $this->commentService = $commentService;
     }
 
-    public function store(CommentRequest $request): JsonResponse
+    public function store(CommentStoreApiRequest $request): JsonResponse
     {
         $comment = $this->commentService->createComment($request->validated());
 
@@ -37,13 +38,13 @@ class CommentController extends Controller
         return response()->json(['message' => 'Comment deleted successfully.'], 200);
     }
 
-    public function approve(Comment $comment): JsonResponse
+    public function approve(Comment $comment, CommentApproveApiRequest $request): JsonResponse
     {
         if (!auth()->user()->is_admin) {
             return response()->json(['message' => 'Unauthorized action.'], 403);
         }
 
-        $approvedComment = $this->commentService->approveComment($comment);
+        $approvedComment = $this->commentService->approveComment($comment, $request->validated());
         return response()->json([
             'message' => 'Comment approved successfully.',
             'comment' => $this->commentService->getCommentResource($approvedComment)

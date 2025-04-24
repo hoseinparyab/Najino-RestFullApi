@@ -3,7 +3,7 @@ namespace App\Http\ApiRequests\Comment;
 
 use App\RestfulApi\ApiFormRequest;
 
-class CommentRequest extends ApiFormRequest
+class CommentStoreApiRequest extends ApiFormRequest
 {
     public function authorize(): bool
     {

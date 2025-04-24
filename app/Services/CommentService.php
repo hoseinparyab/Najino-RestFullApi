@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Models\Comment;
-use App\Http\Resources\CommentResource;
+use App\Http\Resources\Comment\CommentResource;
+use App\Http\Resources\Comment\CommentCollection;
 use Illuminate\Support\Facades\Auth;
 
 class CommentService
@@ -23,9 +24,12 @@ class CommentService
         return $comment->delete();
     }
 
-    public function approveComment(Comment $comment): Comment
+    public function approveComment(Comment $comment, array $data): Comment
     {
-        $comment->update(['is_approved' => true]);
+        $comment->update([
+            'is_approved' => $data['is_approved'],
+            'rejection_reason' => $data['rejection_reason'] ?? null
+        ]);
         return $comment;
     }
 
@@ -41,8 +45,8 @@ class CommentService
         return new CommentResource($comment);
     }
 
-    public function getCommentCollection($comments)
+    public function getCommentCollection($comments): CommentCollection
     {
-        return CommentResource::collection($comments);
+        return new CommentCollection($comments);
     }
 }

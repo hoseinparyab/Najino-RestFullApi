@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
+
 class PermissionSeeder extends Seeder
 {
     /**
@@ -12,101 +15,44 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::factory()->state([
-            'name' => 'user_read',
-            'display_name' => 'User Read',
-        ])->create();
+        // Create permissions
+        $permissions = [
+            'comment_create' => 'Create Comments',
+            'comment_approve' => 'Approve Comments',
+            'comment_delete' => 'Delete Comments',
+            'comment_view' => 'View Comments'
+        ];
 
-        Permission::factory()->state([
-            'name' => 'user_create',
-            'display_name' => 'User Create',
-        ])->create();
+        foreach ($permissions as $name => $display_name) {
+            Permission::create([
+                'name' => $name,
+                'display_name' => $display_name
+            ]);
+        }
 
-        Permission::factory()->state([
-            'name' => 'user_update',
-            'display_name' => 'User Update',
-        ])->create();
+        // Create admin role
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'display_name' => 'Administrator'
+        ]);
 
-        Permission::factory()->state([
-            'name' => 'user_delete',
-            'display_name' => 'User Delete',
-        ])->create();
+        // Assign all permissions to admin role
+        $adminRole->permissions()->attach(Permission::all());
 
-        Permission::factory()->state([
-            'name' => 'role_read',
-            'display_name' => 'Role Read',
-        ])->create();
+        // Create user role
+        $userRole = Role::create([
+            'name' => 'user',
+            'display_name' => 'Regular User'
+        ]);
 
-        Permission::factory()->state([
-            'name' => 'role_create',
-            'display_name' => 'Role Create',
-        ])->create();
+        // Assign basic permissions to user role
+        $userRole->permissions()->attach(
+            Permission::whereIn('name', ['comment_create', 'comment_view'])->get()
+        );
 
-        Permission::factory()->state([
-            'name' => 'role_update',
-            'display_name' => 'Role Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'role_delete',
-            'display_name' => 'Role Delete',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_read',
-            'display_name' => 'Category Read',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_create',
-            'display_name' => 'Category Create',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_update',
-            'display_name' => 'Category Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_delete',
-            'display_name' => 'Category Delete',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_read',
-            'display_name' => 'Article Read',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_create',
-            'display_name' => 'Article Create',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_update',
-            'display_name' => 'Article Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_delete',
-            'display_name' => 'Article Delete',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'comment_approve',
-            'display_name' => 'Comment Approve',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'comment_pending',
-            'display_name' => 'Comment Pending',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'comment_delete',
-            'display_name' => 'Comment Delete',
-        ])->create();
-
-
+        // Assign admin role to the first user (usually the one created during installation)
+        if ($user = User::first()) {
+            $user->roles()->attach($adminRole);
+        }
     }
 }
