@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\ApiRequests\Comment\CommentStoreApiRequest;
 use App\Http\ApiRequests\Comment\CommentApproveApiRequest;
 use App\Services\CommentService;
+use App\RestfulApi\Facades\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use App\Models\Comment;
+use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class CommentController extends Controller
 {
@@ -20,22 +23,59 @@ class CommentController extends Controller
 
     public function store(CommentStoreApiRequest $request): JsonResponse
     {
-        $comment = $this->commentService->createComment($request->validated());
+        try {
+            $result = $this->commentService->createComment($request->validated());
 
-        return response()->json([
-            'message' => 'Comment submitted successfully. Waiting for admin approval.',
-            'comment' => $this->commentService->getCommentResource($comment)
-        ], 201);
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to create comment')
+                    ->withStatus(500)
+                    ->build()
+                    ->response();
+            }
+
+            return ApiResponse::withMessage('Comment created successfully')
+                ->withData($this->commentService->getCommentResource($result->data))
+                ->withStatus(201)
+                ->build()
+                ->response();
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return ApiResponse::withMessage('Something went wrong, please try again later!')
+                ->withStatus(500)
+                ->build()
+                ->response();
+        }
     }
 
     public function destroy(Comment $comment): JsonResponse
     {
-        if (!auth()->user()->is_admin && auth()->id() !== $comment->user_id) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
-        }
+        try {
+            if (!auth()->user()->is_admin && auth()->id() !== $comment->user_id) {
+                return ApiResponse::withMessage('Unauthorized action.')
+                    ->withStatus(403)
+                    ->build()
+                    ->response();
+            }
 
-        $this->commentService->deleteComment($comment);
-        return response()->json(['message' => 'Comment deleted successfully.'], 200);
+            $result = $this->commentService->deleteComment($comment);
+
+            if (!$result->ok) {
+                return ApiResponse::withMessage('Failed to delete comment')
+                    ->withStatus(500)
+                    ->build()
+                    ->response();
+            }
+
+            return ApiResponse::withMessage('Comment deleted successfully')
+                ->build()
+                ->response();
+        } catch (Throwable $th) {
+            app()[ExceptionHandler::class]->report($th);
+            return ApiResponse::withMessage('Something went wrong, please try again later!')
+                ->withStatus(500)
+                ->build()
+                ->response();
+        }
     }
 
     public function approve(Comment $comment, CommentApproveApiRequest $request): JsonResponse
@@ -58,4 +98,5 @@ class CommentController extends Controller
             'comments' => $this->commentService->getCommentCollection($pendingComments)
         ], 200);
     }
+
 }

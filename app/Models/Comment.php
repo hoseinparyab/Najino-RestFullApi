@@ -12,7 +12,6 @@ class Comment extends Model
 
     protected $fillable = [
         'content',
-        'is_approved',
         'user_id',
         'article_id',
         'parent_id'
@@ -36,16 +35,6 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function scopeApproved($query)
-    {
-        return $query->where('is_approved', true);
-    }
-
-    public function scopePending($query)
-    {
-        return $query->where('is_approved', false);
     }
 
     public function scopeDeleted($query)

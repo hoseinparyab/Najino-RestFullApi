@@ -19,10 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('users/{user}/assign-roles', AssignRoleToUserController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('articles', ArticleController::class);
-    Route::post('/comments/{comment}/approve', [CommentController::class, 'approve']);
-    Route::get('/comments/pending', [CommentController::class, 'pending']);
 
     Route::get('/contacts', [ContactController::class, 'index']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
-
 });

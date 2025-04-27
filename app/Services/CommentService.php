@@ -6,38 +6,27 @@ use App\Models\Comment;
 use App\Http\Resources\Comment\CommentResource;
 use App\Http\Resources\Comment\CommentCollection;
 use Illuminate\Support\Facades\Auth;
+use App\Base\ServiceResult;
+use App\Base\ServiceWrapper;
 
 class CommentService
 {
-    public function createComment(array $data): Comment
+    public function createComment(array $data): ServiceResult
     {
-        return Comment::create([
-            'content' => $data['content'],
-            'article_id' => $data['article_id'],
-            'user_id' => Auth::id(),
-            'is_approved' => false
-        ]);
+        return app(ServiceWrapper::class)(function () use ($data) {
+            return Comment::create([
+                'content' => $data['content'],
+                'article_id' => $data['article_id'],
+                'user_id' => Auth::id()
+            ]);
+        });
     }
 
-    public function deleteComment(Comment $comment): bool
+    public function deleteComment(Comment $comment): ServiceResult
     {
-        return $comment->delete();
-    }
-
-    public function approveComment(Comment $comment, array $data): Comment
-    {
-        $comment->update([
-            'is_approved' => $data['is_approved'],
-            'rejection_reason' => $data['rejection_reason'] ?? null
-        ]);
-        return $comment;
-    }
-
-    public function getPendingComments()
-    {
-        return Comment::where('is_approved', false)
-            ->with(['user', 'article'])
-            ->get();
+        return app(ServiceWrapper::class)(function () use ($comment) {
+            return $comment->delete();
+        });
     }
 
     public function getCommentResource(Comment $comment): CommentResource
