@@ -77,26 +77,4 @@ class CommentController extends Controller
                 ->response();
         }
     }
-
-    public function approve(Comment $comment, CommentApproveApiRequest $request): JsonResponse
-    {
-        if (!auth()->user()->is_admin) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
-        }
-
-        $approvedComment = $this->commentService->approveComment($comment, $request->validated());
-        return response()->json([
-            'message' => 'Comment approved successfully.',
-            'comment' => $this->commentService->getCommentResource($approvedComment)
-        ], 200);
-    }
-
-    public function pending(): JsonResponse
-    {
-        $pendingComments = $this->commentService->getPendingComments();
-        return response()->json([
-            'comments' => $this->commentService->getCommentCollection($pendingComments)
-        ], 200);
-    }
-
 }

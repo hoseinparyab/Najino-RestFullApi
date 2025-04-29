@@ -21,6 +21,19 @@ class Article extends Model
         'image',
         'view'
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->where(function($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('body', 'like', "%{$search}%");
+        });
+    }
+
     public function sluggable(): array
     {
         return [
@@ -40,6 +53,12 @@ class Article extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     protected static $rules = [
         'title'      => ['required', 'string', 'min:1', 'max:255'],
         'category_id' => ['required', 'exists:categories,id'],

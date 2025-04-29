@@ -8,6 +8,7 @@ use App\RestfulApi\Facades\ApiResponse;
 use App\Http\Resources\Article\ArticleResource;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Models\Article;
 
 class HomeController extends Controller
 {
@@ -45,7 +46,8 @@ class HomeController extends Controller
     public function show($id)
     {
         try {
-            $result = $this->articleService->getArticleById($id);
+            $article = Article::findOrFail($id);
+            $result = $this->articleService->getArticleInfo($article);
 
             if (!$result->ok) {
                 return ApiResponse::withMessage('Article not found')

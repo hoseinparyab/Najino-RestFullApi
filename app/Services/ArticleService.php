@@ -5,6 +5,7 @@ use App\Base\ServiceResult;
 use App\Base\ServiceWrapper;
 use App\Models\Article;
 use App\SearchOptions\ArticleAuthorSearchOptions;
+use App\SearchOptions\ArticleSearchOptions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ class ArticleService
     {
         return app(ServiceWrapper::class)(function () use ($inputs) {
             return Article::with(['user', 'category'])
-                ->search($inputs, new ArticleAuthorSearchOptions())
+                ->search($inputs['search'] ?? null)
                 ->latest()
                 ->paginate(10);
         });
@@ -23,7 +24,7 @@ class ArticleService
     public function getArticleInfo(Article $article): ServiceResult
     {
         return app(ServiceWrapper::class)(function () use ($article) {
-            $article->load(['user', 'category']);
+            $article->load(['user', 'category', 'comments.user']);
             return $article;
         });
     }

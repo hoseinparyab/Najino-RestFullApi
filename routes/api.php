@@ -17,7 +17,6 @@ Route::get('/articles/{article}', [HomeController::class, 'show']);
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
 // Contact routes
 Route::post('/contact', [ContactController::class, 'store']);
 
@@ -32,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'show']);
-    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::patch('/profile', [ProfileController::class, 'update']);
 });
 
 
