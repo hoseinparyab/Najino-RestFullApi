@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Base\traits\HasRules;
 use Laravel\Sanctum\HasApiTokens;
 use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
+use Illuminate\Auth\Passwords\CanResetPassword;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRules, Searchable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRules, Searchable, CanResetPassword;
 
     /**
      * The attributes that are mass assignable.
