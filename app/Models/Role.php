@@ -10,7 +10,7 @@ class Role extends Model
 {
     use HasFactory, SoftDeletes, HasRules;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'display_name'];
 
     protected static $rules = [
         'name'          => 'required|string|unique:roles,name',
@@ -22,5 +22,20 @@ class Role extends Model
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
+    }
+
+    /**
+     * Create a role if it doesn't exist
+     *
+     * @param string $name
+     * @param string $displayName
+     * @return Role
+     */
+    public static function createIfNotExists(string $name, string $displayName): Role
+    {
+        return self::firstOrCreate(
+            ['name' => $name],
+            ['display_name' => $displayName]
+        );
     }
 }

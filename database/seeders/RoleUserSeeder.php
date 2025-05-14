@@ -15,8 +15,9 @@ class RoleUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'admin@gmail.com')->first();
-        $role = Role::where('name', 'admin')->first();
-        $user->roles()->attach($role->id);
+        // This seeder is empty by design
+        // Admin users are created only via admin:create command
+        $this->command->info('RoleUserSeeder: No users were assigned roles automatically.');
+        $this->command->line('Use "php artisan admin:create" to create admin users.');
     }
 }

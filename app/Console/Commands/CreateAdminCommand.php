@@ -4,17 +4,36 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class CreateAdminCommand extends Command
 {
-    protected $signature = 'admin:create';
-    protected $description = 'Create a new admin user interactively';
+    protected $signature = 'admin:create {--email= : Optional email of existing user}';
+    protected $description = 'Create a new admin user or make an existing user admin';
 
     public function handle()
     {
+        // Check if email option is provided
+        $existingEmail = $this->option('email');
+
+        if ($existingEmail) {
+            // Try to find the existing user
+            $existingUser = User::where('email', $existingEmail)->first();
+
+            if (!$existingUser) {
+                $this->error("No user found with email: $existingEmail");
+                if (!$this->confirm('Would you like to create a new admin user instead?')) {
+                    return 1;
+                }
+                // Fall through to create a new user
+            } else {
+                return $this->makeUserAdmin($existingUser);
+            }
+        }
+
         $this->info('Creating a new admin user...');
 
         // Get user information
@@ -23,6 +42,16 @@ class CreateAdminCommand extends Command
         $email = $this->ask('What is the admin email?');
         $password = $this->secret('What is the admin password?');
         $passwordConfirmation = $this->secret('Please confirm the password');
+
+        // Check if user already exists
+        $existingUser = User::where('email', $email)->first();
+        if ($existingUser) {
+            if ($this->confirm("A user with email $email already exists. Would you like to make this user an admin?")) {
+                return $this->makeUserAdmin($existingUser);
+            }
+            $this->error('Operation cancelled.');
+            return 1;
+        }
 
         // Validate input
         $validator = Validator::make([
@@ -53,6 +82,17 @@ class CreateAdminCommand extends Command
             'password' => Hash::make($password),
         ]);
 
+        return $this->makeUserAdmin($admin);
+    }
+
+    /**
+     * Make a user an admin
+     *
+     * @param User $user
+     * @return int
+     */
+    protected function makeUserAdmin(User $user)
+    {
         // Get admin role
         $adminRole = Role::where('name', 'admin')->first();
 
@@ -61,15 +101,51 @@ class CreateAdminCommand extends Command
             return 1;
         }
 
-        // Assign admin role
-        $admin->roles()->attach($adminRole->id);
+        // Get all permissions and ensure the admin role has all of them
+        $allPermissions = Permission::all();
+        $this->ensureAdminHasAllPermissions($adminRole, $allPermissions);
 
-        $this->info('Admin user created successfully!');
+        // Check if user already has admin role
+        if ($user->roles()->where('role_id', $adminRole->id)->exists()) {
+            $this->line("User '{$user->email}' is already an admin.");
+            return 0;
+        }
+
+        // Assign admin role
+        $user->roles()->attach($adminRole->id);
+
+        $this->info('Admin user created/updated successfully!');
         $this->table(
-            ['Name', 'Email'],
-            [[$admin->first_name . ' ' . $admin->last_name, $admin->email]]
+            ['ID', 'Name', 'Email'],
+            [[$user->id, $user->first_name . ' ' . $user->last_name, $user->email]]
         );
 
+        $this->info("User has been granted {$allPermissions->count()} permissions through the admin role.");
+
         return 0;
+    }
+
+    /**
+     * Ensure that the admin role has all available permissions
+     *
+     * @param Role $adminRole
+     * @param \Illuminate\Database\Eloquent\Collection $permissions
+     * @return void
+     */
+    protected function ensureAdminHasAllPermissions(Role $adminRole, $permissions)
+    {
+        // Get IDs of permissions that admin role doesn't have yet
+        $existingPermissionIds = $adminRole->permissions()->pluck('id')->toArray();
+        $newPermissionIds = $permissions->pluck('id')
+            ->filter(function ($id) use ($existingPermissionIds) {
+                return !in_array($id, $existingPermissionIds);
+            })
+            ->toArray();
+
+        if (count($newPermissionIds) > 0) {
+            // Attach new permissions to admin role
+            $adminRole->permissions()->attach($newPermissionIds);
+            $this->info('Added ' . count($newPermissionIds) . ' new permissions to the admin role.');
+        }
     }
 }

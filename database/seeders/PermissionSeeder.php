@@ -15,92 +15,33 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::factory()->state([
-            'name' => 'user_read',
-            'display_name' => 'User Read',
-        ])->create();
+        // User permissions
+        Permission::createIfNotExists('user_read', 'User Read');
+        Permission::createIfNotExists('user_create', 'User Create');
+        Permission::createIfNotExists('user_update', 'User Update');
+        Permission::createIfNotExists('user_delete', 'User Delete');
 
-        Permission::factory()->state([
-            'name' => 'user_create',
-            'display_name' => 'User Create',
-        ])->create();
+        // Role permissions
+        Permission::createIfNotExists('role_read', 'Role Read');
+        Permission::createIfNotExists('role_create', 'Role Create');
+        Permission::createIfNotExists('role_update', 'Role Update');
+        Permission::createIfNotExists('role_delete', 'Role Delete');
 
-        Permission::factory()->state([
-            'name' => 'user_update',
-            'display_name' => 'User Update',
-        ])->create();
+        // Category permissions
+        Permission::createIfNotExists('category_read', 'Category Read');
+        Permission::createIfNotExists('category_create', 'Category Create');
+        Permission::createIfNotExists('category_update', 'Category Update');
+        Permission::createIfNotExists('category_delete', 'Category Delete');
 
-        Permission::factory()->state([
-            'name' => 'user_delete',
-            'display_name' => 'User Delete',
-        ])->create();
+        // Article permissions
+        Permission::createIfNotExists('article_read', 'Article Read');
+        Permission::createIfNotExists('article_create', 'Article Create');
+        Permission::createIfNotExists('article_update', 'Article Update');
+        Permission::createIfNotExists('article_delete', 'Article Delete');
 
-        Permission::factory()->state([
-            'name' => 'role_read',
-            'display_name' => 'Role Read',
-        ])->create();
+        // Comment permissions
+        Permission::createIfNotExists('comment_delete', 'Comment Delete');
 
-        Permission::factory()->state([
-            'name' => 'role_create',
-            'display_name' => 'Role Create',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'role_update',
-            'display_name' => 'Role Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'role_delete',
-            'display_name' => 'Role Delete',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_read',
-            'display_name' => 'Category Read',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_create',
-            'display_name' => 'Category Create',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_update',
-            'display_name' => 'Category Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'category_delete',
-            'display_name' => 'Category Delete',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_read',
-            'display_name' => 'Article Read',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_create',
-            'display_name' => 'Article Create',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_update',
-            'display_name' => 'Article Update',
-        ])->create();
-
-        Permission::factory()->state([
-            'name' => 'article_delete',
-            'display_name' => 'Article Delete',
-        ])->create();
-
-
-        Permission::factory()->state([
-            'name' => 'comment_delete',
-            'display_name' => 'Comment Delete',
-        ])->create();
-
-
+        $this->command->info('Created ' . Permission::count() . ' permissions.');
     }
 }
