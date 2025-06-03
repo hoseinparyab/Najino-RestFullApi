@@ -20,7 +20,7 @@ class PortfolioController extends Controller
     public function index()
     {
         $result = $this->portfolioService->getAllPortfolios();
-        return response()->json($result->getData());
+        return response()->json($result->data);
     }
 
     public function store(StorePortfolioRequest $request)
@@ -28,13 +28,13 @@ class PortfolioController extends Controller
         $validated = $request->validated();
 
         $result = $this->portfolioService->createPortfolio($validated);
-        return response()->json($result->getData(), 201);
+        return response()->json($result->data, 201);
     }
 
     public function show(Portfolio $portfolio)
     {
         $result = $this->portfolioService->getPortfolio($portfolio);
-        return response()->json($result->getData());
+        return response()->json($result->data);
     }
 
     public function update(UpdatePortfolioRequest $request, Portfolio $portfolio)
@@ -42,7 +42,7 @@ class PortfolioController extends Controller
         $validated = $request->validated();
 
         $result = $this->portfolioService->updatePortfolio($validated, $portfolio);
-        return response()->json($result->getData());
+        return response()->json($result->data);
     }
 
     public function destroy(Portfolio $portfolio)

@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             // 5. Other seeders
             CategorySeeder::class,
             ArticleSeeder::class,
+            PortfolioSeeder::class,
         ]);
     }
 }

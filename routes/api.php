@@ -18,6 +18,10 @@ Route::post('/login', [AuthController::class, 'login']);
 // Contact routes
 Route::post('/contact', [ContactController::class, 'store']);
 
+// Portfolio public routes
+Route::get('/portfolios', [PortfolioController::class, 'index']);
+Route::get('/portfolios/{portfolio}', [PortfolioController::class, 'show']);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -30,8 +34,4 @@ Route::middleware('auth:sanctum')->group(function () {
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::patch('/profile', [ProfileController::class, 'update']);
-
-    // Portfolio public routes
-    Route::get('/portfolios', [PortfolioController::class, 'index']);
-    Route::get('/portfolios/{portfolio}', [PortfolioController::class, 'show']);
 });
