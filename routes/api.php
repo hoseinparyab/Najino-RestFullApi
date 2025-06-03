@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\HomeController;
 use App\Http\Controllers\Api\V1\ProfileController;
-use App\Http\Controllers\Api\V1\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 // Home routes
@@ -22,9 +21,7 @@ Route::post('/login', [AuthController::class, 'login']);
 // Contact routes
 Route::post('/contact', [ContactController::class, 'store']);
 
-// Portfolio public routes
-Route::get('/portfolios', [PortfolioController::class, 'index']);
-Route::get('/portfolios/{portfolio}', [PortfolioController::class, 'show']);
+
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {

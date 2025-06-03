@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\PortfolioController;
+use App\Http\Controllers\Api\V1\Admin\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
