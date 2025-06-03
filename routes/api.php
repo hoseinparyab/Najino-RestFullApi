@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Home routes
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/articles/{article}', [HomeController::class, 'show']);
+Route::get('/home/articles', [HomeController::class, 'index']);
+Route::get('/home/articles/{article}', [HomeController::class, 'show']);
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
