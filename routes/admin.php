@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ContactController;
+use App\Http\Controllers\Api\V1\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -18,6 +19,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('users/{user}/assign-roles', AssignRoleToUserController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('articles', ArticleController::class);
+
+    // Portfolio admin routes
+    Route::post('/portfolios', [PortfolioController::class, 'store']);
+    Route::put('/portfolios/{portfolio}', [PortfolioController::class, 'update']);
+    Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy']);
 
     Route::get('/contacts', [ContactController::class, 'index']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
