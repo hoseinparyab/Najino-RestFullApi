@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Portfolio;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use App\Services\ServiceResult;
-use App\Services\ServiceWrapper;
+use App\Base\ServiceResult;
+use App\Base\ServiceWrapper;
 
 class PortfolioService
 {

@@ -14,19 +14,22 @@ return new class extends Migration
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
             $table->string('cover_image')->nullable();
+            $table->json('images')->nullable();
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('site_address')->nullable();
             $table->text('our_job')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('portfolios');
     }
 };
+
