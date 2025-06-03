@@ -2,13 +2,14 @@
 
 namespace App\Http\ApiRequests\Portfolio;
 
+use Illuminate\Support\Facades\Gate;
 use App\RestfulApi\ApiFormRequest;
 
 class UpdatePortfolioRequest extends ApiFormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('portfolio_update');
     }
 
     public function rules(): array

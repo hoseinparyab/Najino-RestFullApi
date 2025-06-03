@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/home/articles', [HomeController::class, 'index']);
 Route::get('/home/articles/{article}', [HomeController::class, 'show']);
 
+// Portfolio routes
+Route::get('/portfolios', [HomeController::class, 'portfolios']);
+Route::get('/portfolios/{id}', [HomeController::class, 'portfolio']);
+
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

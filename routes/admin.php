@@ -21,9 +21,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('articles', ArticleController::class);
 
     // Portfolio admin routes
+    Route::get('/portfolios', [PortfolioController::class, 'index']);
     Route::post('/portfolios', [PortfolioController::class, 'store']);
     Route::put('/portfolios/{portfolio}', [PortfolioController::class, 'update']);
     Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy']);
+
 
     Route::get('/contacts', [ContactController::class, 'index']);
     Route::delete('/contacts/{contact}', [ContactController::class, 'destroy']);
