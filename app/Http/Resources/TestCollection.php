@@ -33,5 +33,4 @@ class TestCollection extends ResourceCollection
             ],
         ];
     }
-
 }

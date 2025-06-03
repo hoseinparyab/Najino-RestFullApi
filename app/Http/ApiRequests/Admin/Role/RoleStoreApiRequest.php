@@ -2,10 +2,10 @@
 
 namespace App\Http\ApiRequests\Admin\Role;
 
-use App\RestfulApi\ApiFormRequest;
 use App\Models\Role;
-use App\Http\ApiRequests\Admin\Role\RoleStoreApiRequest;
+use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
+
 class RoleStoreApiRequest extends ApiFormRequest
 {
     /**

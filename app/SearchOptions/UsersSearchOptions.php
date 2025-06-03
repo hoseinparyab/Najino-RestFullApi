@@ -1,4 +1,5 @@
 <?php
+
 namespace App\SearchOptions;
 
 use Amirhosseinabd\LaravelEasySearch\Concerns\MultipleSearchOptions;
@@ -20,7 +21,7 @@ class UsersSearchOptions implements MultipleSearchOptions
     {
         return [
             'first_name' => 'name',
-            'email'      => 'email',
+            'email' => 'email',
         ];
     }
 }

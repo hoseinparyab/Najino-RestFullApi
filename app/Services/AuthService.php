@@ -26,17 +26,17 @@ class AuthService
         $user->save();
 
         // Debugging: Check if the token is set
-        \Log::info('Token created during registration: ' . $token);
+        \Log::info('Token created during registration: '.$token);
 
         return [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
         ];
     }
 
     public function login(array $credentials): array
     {
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -70,7 +70,7 @@ class AuthService
         return [
             'user' => $user,
             'token' => $token,
-            'expires_at' => $expiresAt
+            'expires_at' => $expiresAt,
         ];
     }
 
@@ -86,5 +86,4 @@ class AuthService
             ->where('created_at', '<', now()->subDays(30))
             ->delete();
     }
-
 }

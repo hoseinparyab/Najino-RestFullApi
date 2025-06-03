@@ -21,7 +21,7 @@ class CategoryDetailsApiResource extends JsonResource
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'articles_count' => $this->whenLoaded('articles', fn() => $this->articles->count()),
+            'articles_count' => $this->whenLoaded('articles', fn () => $this->articles->count()),
         ];
     }
 }

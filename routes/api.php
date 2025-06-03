@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\UserController;
-use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\HomeController;
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Home routes
@@ -33,8 +30,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::patch('/profile', [ProfileController::class, 'update']);
 });
-
-
-
-
-

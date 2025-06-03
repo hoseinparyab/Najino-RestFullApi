@@ -1,4 +1,5 @@
 <?php
+
 namespace App\SearchOptions;
 
 use Amirhosseinabd\LaravelEasySearch\Concerns\SingleSearchOptions;
@@ -14,12 +15,9 @@ class ArticleAuthorSearchOptions implements SingleSearchOptions, WithRelation
         return ['email'];
     }
 
-    /**
-     * @return string
-     */
     public function inputName(): string
     {
-        return "query";
+        return 'query';
     }
 
     public function relation(): string

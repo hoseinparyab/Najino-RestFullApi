@@ -10,7 +10,7 @@ class ArticleSearchOptions implements MultipleSearchOptions
     {
         return [
             'title',
-            'body'
+            'body',
         ];
     }
 
@@ -18,7 +18,7 @@ class ArticleSearchOptions implements MultipleSearchOptions
     {
         return [
             'title' => 'search',
-            'body' => 'search'
+            'body' => 'search',
         ];
     }
 }

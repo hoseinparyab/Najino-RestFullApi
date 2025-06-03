@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Comment;
-use App\Http\Resources\Comment\CommentResource;
-use App\Http\Resources\Comment\CommentCollection;
-use Illuminate\Support\Facades\Auth;
 use App\Base\ServiceResult;
 use App\Base\ServiceWrapper;
+use App\Http\Resources\Comment\CommentCollection;
+use App\Http\Resources\Comment\CommentResource;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
@@ -17,7 +17,7 @@ class CommentService
             return Comment::create([
                 'content' => $data['content'],
                 'article_id' => $data['article_id'],
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\ApiRequests\Admin\Article;
 use App\Models\Article;
 use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
+
 class ArticleUpdateApiRequest extends ApiFormRequest
 {
     /**

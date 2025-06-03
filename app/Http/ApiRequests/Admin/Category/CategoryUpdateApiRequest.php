@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\ApiRequests\Admin\Category;
 
 use App\Models\Category;
 use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
+
 class CategoryUpdateApiRequest extends ApiFormRequest
 {
     /**

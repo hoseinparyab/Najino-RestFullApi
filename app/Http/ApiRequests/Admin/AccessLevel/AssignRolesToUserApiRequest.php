@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\ApiRequests\Admin\AccessLevel;
 
 use App\RestfulApi\ApiFormRequest;
@@ -10,7 +11,7 @@ class AssignRolesToUserApiRequest extends ApiFormRequest
      */
     public function authorize(): bool
     {
-            return true;
+        return true;
     }
 
     /**
@@ -21,8 +22,8 @@ class AssignRolesToUserApiRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'roles'   => 'required|array', //TODO: check if the role is exists
-            'roles.*' => 'exists:roles,id', //TODO: check if the role is exists
+            'roles' => 'required|array', // TODO: check if the role is exists
+            'roles.*' => 'exists:roles,id', // TODO: check if the role is exists
         ];
     }
 }

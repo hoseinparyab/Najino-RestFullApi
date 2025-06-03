@@ -2,8 +2,8 @@
 
 namespace App\Http\ApiRequests\Admin\Role;
 
-use App\RestfulApi\ApiFormRequest;
 use App\Models\Role;
+use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
 
 class RoleUpdateApiRequest extends ApiFormRequest
@@ -26,6 +26,6 @@ class RoleUpdateApiRequest extends ApiFormRequest
         $role = $this->route('role');
         $roleId = $role instanceof Role ? $role->id : $role;
 
-        return Role::rules(['name' => 'required|string|unique:roles,name,' . $roleId]);
+        return Role::rules(['name' => 'required|string|unique:roles,name,'.$roleId]);
     }
 }

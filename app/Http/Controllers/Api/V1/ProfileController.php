@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\ApiRequests\Profile\UpdateProfileRequest;
+use App\Http\Controllers\Controller;
 use App\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,8 +20,9 @@ class ProfileController extends Controller
     public function show(Request $request): JsonResponse
     {
         $profile = $request->user()->profile;
+
         return response()->json([
-            'profile' => $profile
+            'profile' => $profile,
         ]);
     }
 
@@ -31,7 +32,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'message' => 'Profile updated successfully',
-            'profile' => $profile
+            'profile' => $profile,
         ]);
     }
 }

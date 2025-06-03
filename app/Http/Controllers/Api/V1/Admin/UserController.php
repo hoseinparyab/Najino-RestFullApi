@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\ApiRequests\Admin\User\UserDestroyApiRequest;
@@ -6,21 +7,16 @@ use App\Http\ApiRequests\Admin\User\UserIndexApiRequest;
 use App\Http\ApiRequests\Admin\User\UserShowApiRequest;
 use App\Http\ApiRequests\Admin\User\UserStoreApiRequest;
 use App\Http\ApiRequests\Admin\User\UserUpdateApiRequest;
-use App\SearchOptions\UsersSearchOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\User\UserDetailsApiResource;
 use App\Http\Resources\Admin\User\UsersListApiResource;
 use App\Models\User;
 use App\RestfulApi\Facades\ApiResponse;
 use App\Services\UserService;
-use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
-    public function __construct(private UserService $userService)
-    {
-    }
-
+    public function __construct(private UserService $userService) {}
 
     public function index(UserIndexApiRequest $request)
     {
@@ -43,7 +39,6 @@ class UserController extends Controller
 
         return ApiResponse::withMessage('User created successfully')->withData($result->data)->build()->response();
     }
-
 
     public function show(UserShowApiRequest $request, User $user)
     {

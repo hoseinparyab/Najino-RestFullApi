@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,10 +31,6 @@ class Permission extends Model
 
     /**
      * Create a permission if it doesn't exist
-     *
-     * @param string $name
-     * @param string $displayName
-     * @return Permission
      */
     public static function createIfNotExists(string $name, string $displayName): Permission
     {
@@ -43,4 +40,3 @@ class Permission extends Model
         );
     }
 }
-

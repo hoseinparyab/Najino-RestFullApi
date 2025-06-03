@@ -3,19 +3,19 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
+use App\Base\traits\HasRules;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Base\traits\HasRules;
 use Laravel\Sanctum\HasApiTokens;
-use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
-use Illuminate\Auth\Passwords\CanResetPassword;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRules, Searchable, CanResetPassword;
+    use CanResetPassword, HasApiTokens, HasFactory, HasRules, Notifiable, Searchable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -51,15 +51,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
     protected static $rules = [
         'first_name' => ['required', 'string', 'min:1', 'max:255'],
         'last_name' => ['required', 'string', 'min:1', 'max:255'],
         'email' => ['required', 'email', 'unique:users,email'],
         'password' => ['required', 'string', 'min:8', 'max:255'],
     ];
+
     public function getFullNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public function roles()

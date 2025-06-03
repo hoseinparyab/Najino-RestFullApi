@@ -19,12 +19,12 @@ class Profile extends Model
         'birth_date',
         'gender',
         'website',
-        'social_links'
+        'social_links',
     ];
 
     protected $casts = [
         'birth_date' => 'date',
-        'social_links' => 'array'
+        'social_links' => 'array',
     ];
 
     public function user()

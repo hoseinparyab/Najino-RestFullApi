@@ -24,7 +24,7 @@ class ArticleSeeder extends Seeder
             },
             'category_id' => function () use ($categories) {
                 return $categories->random()->id;
-            }
+            },
         ]);
     }
 }

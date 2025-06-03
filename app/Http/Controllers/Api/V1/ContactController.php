@@ -2,26 +2,24 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\ApiRequests\Contact\ContactStoreApiRequest;
-use App\Services\ContactService;
-use App\RestfulApi\Facades\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Models\Contact;
-use Throwable;
+use App\RestfulApi\Facades\ApiResponse;
+use App\Services\ContactService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
 
 class ContactController extends Controller
 {
-    public function __construct(private ContactService $contactService)
-    {
-    }
+    public function __construct(private ContactService $contactService) {}
 
     public function index()
     {
         try {
             $result = $this->contactService->getContacts();
 
-            if (!$result->ok) {
+            if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to fetch contacts')
                     ->withStatus(500)
                     ->build()
@@ -33,6 +31,7 @@ class ContactController extends Controller
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
+
             return ApiResponse::withMessage('Something went wrong, please try again later!')
                 ->withStatus(500)
                 ->build()
@@ -45,7 +44,7 @@ class ContactController extends Controller
         try {
             $result = $this->contactService->createContact($request->validated());
 
-            if (!$result->ok) {
+            if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to create contact')
                     ->withStatus(500)
                     ->build()
@@ -58,6 +57,7 @@ class ContactController extends Controller
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
+
             return ApiResponse::withMessage('Something went wrong, please try again later!')
                 ->withStatus(500)
                 ->build()
@@ -70,7 +70,7 @@ class ContactController extends Controller
         try {
             $result = $this->contactService->deleteContact($contact);
 
-            if (!$result->ok) {
+            if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to delete contact')
                     ->withStatus(500)
                     ->build()
@@ -82,6 +82,7 @@ class ContactController extends Controller
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
+
             return ApiResponse::withMessage('Something went wrong, please try again later!')
                 ->withStatus(500)
                 ->build()

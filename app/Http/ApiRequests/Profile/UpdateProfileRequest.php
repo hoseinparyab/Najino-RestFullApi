@@ -22,7 +22,7 @@ class UpdateProfileRequest extends ApiFormRequest
             'gender' => 'nullable|in:male,female,other',
             'website' => 'nullable|url|max:255',
             'social_links' => 'nullable|array',
-            'social_links.*' => 'url'
+            'social_links.*' => 'url',
         ];
     }
 
@@ -33,7 +33,7 @@ class UpdateProfileRequest extends ApiFormRequest
             'phone.max' => 'The phone number cannot be longer than 20 characters.',
             'gender.in' => 'The gender must be either male, female, or other.',
             'website.url' => 'The website must be a valid URL.',
-            'social_links.*.url' => 'All social links must be valid URLs.'
+            'social_links.*.url' => 'All social links must be valid URLs.',
         ];
     }
 }

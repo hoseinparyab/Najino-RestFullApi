@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Role;
 use App\Models\Permission;
+use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
@@ -29,7 +28,7 @@ class RoleSeeder extends Seeder
             // Sync permissions to admin role (this will add missing ones and keep existing ones)
             $adminRole->permissions()->sync($permissionIds);
 
-            $this->command->info('Added ' . count($permissionIds) . ' permissions to admin role.');
+            $this->command->info('Added '.count($permissionIds).' permissions to admin role.');
         } else {
             $this->command->warn('No permissions found. Make sure PermissionSeeder runs before RoleSeeder.');
         }

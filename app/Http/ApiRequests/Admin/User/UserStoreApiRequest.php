@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\ApiRequests\Admin\User;
 
 use App\Models\User;

@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\ApiRequests\Admin\User;
 
 use App\Models\User;
 use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+
 class UserUpdateApiRequest extends ApiFormRequest
 {
     /**
@@ -25,9 +27,9 @@ class UserUpdateApiRequest extends ApiFormRequest
         return User::rules([
 
             'first_name' => ['required', 'string', 'min:1', 'max:255'],
-            'last_name'  => ['required', 'string', 'min:1', 'max:255'],
-            'email'      => ['required', 'email', 'unique:users,email', Rule::unique('users', 'email')->ignore($this->user->id)],
-            'password'   => ['nullable', 'string', 'min:8', 'max:255'],
+            'last_name' => ['required', 'string', 'min:1', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email', Rule::unique('users', 'email')->ignore($this->user->id)],
+            'password' => ['nullable', 'string', 'min:8', 'max:255'],
         ]);
     }
 }

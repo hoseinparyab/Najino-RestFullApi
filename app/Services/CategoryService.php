@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Base\ServiceResult;
@@ -11,13 +12,13 @@ class CategoryService
     public function getAllCategories(array $inputs): ServiceResult
     {
         return app(ServiceWrapper::class)(function () use ($inputs) {
-            return Category::search($inputs, new CategoriesSearchOptions())->paginate();
+            return Category::search($inputs, new CategoriesSearchOptions)->paginate();
         });
     }
 
     public function getCategoryInfo(Category $category): ServiceResult
     {
-        return app(ServiceWrapper::class)(fn() => $category);
+        return app(ServiceWrapper::class)(fn () => $category);
     }
 
     public function createCategory(array $inputs): ServiceResult
@@ -31,12 +32,13 @@ class CategoryService
     {
         return app(ServiceWrapper::class)(function () use ($inputs, $category) {
             $category->update($inputs);
+
             return $category;
         });
     }
 
     public function deleteCategory(Category $category): ServiceResult
     {
-        return app(ServiceWrapper::class)(fn() => $category->delete());
+        return app(ServiceWrapper::class)(fn () => $category->delete());
     }
 }

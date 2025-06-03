@@ -5,6 +5,7 @@ namespace App\Http\ApiRequests\Admin\Article;
 use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
+
 class ArticleIndexApiRequest extends FormRequest
 {
     /**

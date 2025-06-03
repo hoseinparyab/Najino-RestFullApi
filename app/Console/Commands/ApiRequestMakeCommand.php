@@ -11,7 +11,7 @@ class ApiRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-        protected $signature = 'make:apiRequest {name}';
+    protected $signature = 'make:apiRequest {name}';
 
     /**
      * The console command description.
@@ -25,19 +25,19 @@ class ApiRequestMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/api-request.stub';
+        return __DIR__.'/stubs/api-request.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\ApiRequests';
+        return $rootNamespace.'\Http\ApiRequests';
     }
 
     protected function buildClass($name)
     {
         $stub = $this->files->get($this->getStub());
         $stub = $this->replaceNamespace($stub, $name)->replaceClass($stub, $name);
+
         return $stub;
     }
-
 }

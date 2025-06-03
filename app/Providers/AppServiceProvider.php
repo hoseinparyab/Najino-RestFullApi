@@ -2,12 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Permission;
-use App\Models\Role;
-use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
             try {
                 Permission::with('roles')->each(function ($permission) {
                     Gate::define($permission->name, function ($user) use ($permission) {
-                        return !!$permission->roles->intersect($user->roles)->count();
+                        return (bool) $permission->roles->intersect($user->roles)->count();
                     });
                 });
             } catch (\Exception $e) {

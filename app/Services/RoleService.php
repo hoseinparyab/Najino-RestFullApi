@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Role;
 use App\Base\ServiceResult;
 use App\Base\ServiceWrapper;
+use App\Models\Role;
 use Illuminate\Support\Arr;
 
 class RoleService
@@ -12,7 +12,7 @@ class RoleService
     public function getAllRoles(): ServiceResult
     {
         return app(ServiceWrapper::class)(function () {
-                return Role::all();
+            return Role::all();
         });
     }
 
@@ -28,6 +28,7 @@ class RoleService
         return app(ServiceWrapper::class)(function () use ($inputs) {
             $role = Role::create(Arr::except($inputs, ['permissions']));
             $role->permissions()->attach($inputs['permissions']);
+
             return $role;
 
         });
@@ -38,6 +39,7 @@ class RoleService
         return app(ServiceWrapper::class)(function () use ($inputs, $role) {
             $role->update(Arr::except($inputs, ['permissions']));
             $role->permissions()->sync($inputs['permissions']);
+
             return $role;
 
         });
@@ -50,4 +52,3 @@ class RoleService
         });
     }
 }
-

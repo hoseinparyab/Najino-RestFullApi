@@ -4,6 +4,7 @@ namespace App\Http\ApiRequests\Admin\User;
 
 use App\RestfulApi\ApiFormRequest;
 use Illuminate\Support\Facades\Gate;
+
 class UserDestroyApiRequest extends ApiFormRequest
 {
     /**

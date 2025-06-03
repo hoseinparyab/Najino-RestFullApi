@@ -20,12 +20,12 @@ class CommentResource extends JsonResource
             'created_at' => $this->created_at,
             'user' => [
                 'id' => $this->user->id,
-                'name' => $this->user->name
+                'name' => $this->user->name,
             ],
             'article' => [
                 'id' => $this->article->id,
-                'title' => $this->article->title
-            ]
+                'title' => $this->article->title,
+            ],
         ];
     }
 }

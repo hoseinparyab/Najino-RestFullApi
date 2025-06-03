@@ -17,6 +17,7 @@ class ArticleFactory extends Factory
     public function definition(): array
     {
         $title = $this->faker->sentence();
+
         return [
             'title' => $title,
             'slug' => str($title)->slug(),

@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
 {
@@ -42,6 +41,6 @@ class PermissionSeeder extends Seeder
         // Comment permissions
         Permission::createIfNotExists('comment_delete', 'Comment Delete');
 
-        $this->command->info('Created ' . Permission::count() . ' permissions.');
+        $this->command->info('Created '.Permission::count().' permissions.');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\ApiRequests\Admin\AccessLevel\AssignRolesToUserApiRequest;
@@ -9,9 +10,7 @@ use App\Services\AccessLevelService;
 
 class AssignRoleToUserController extends Controller
 {
-    public function __construct(public AccessLevelService $service)
-    {
-    }
+    public function __construct(public AccessLevelService $service) {}
 
     public function __invoke(AssignRolesToUserApiRequest $request, User $user)
     {

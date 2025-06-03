@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\ApiRequests\Comment\CommentStoreApiRequest;
-use App\Http\ApiRequests\Comment\CommentApproveApiRequest;
-use App\Services\CommentService;
-use App\RestfulApi\Facades\ApiResponse;
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Models\Comment;
-use Throwable;
+use App\RestfulApi\Facades\ApiResponse;
+use App\Services\CommentService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Throwable;
 
 class CommentController extends Controller
 {
@@ -26,7 +25,7 @@ class CommentController extends Controller
         try {
             $result = $this->commentService->createComment($request->validated());
 
-            if (!$result->ok) {
+            if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to create comment')
                     ->withStatus(500)
                     ->build()
@@ -40,6 +39,7 @@ class CommentController extends Controller
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
+
             return ApiResponse::withMessage('Something went wrong, please try again later!')
                 ->withStatus(500)
                 ->build()
@@ -50,7 +50,7 @@ class CommentController extends Controller
     public function destroy(Comment $comment): JsonResponse
     {
         try {
-            if (!auth()->user()->is_admin && auth()->id() !== $comment->user_id) {
+            if (! auth()->user()->is_admin && auth()->id() !== $comment->user_id) {
                 return ApiResponse::withMessage('Unauthorized action.')
                     ->withStatus(403)
                     ->build()
@@ -59,7 +59,7 @@ class CommentController extends Controller
 
             $result = $this->commentService->deleteComment($comment);
 
-            if (!$result->ok) {
+            if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to delete comment')
                     ->withStatus(500)
                     ->build()
@@ -71,6 +71,7 @@ class CommentController extends Controller
                 ->response();
         } catch (Throwable $th) {
             app()[ExceptionHandler::class]->report($th);
+
             return ApiResponse::withMessage('Something went wrong, please try again later!')
                 ->withStatus(500)
                 ->build()

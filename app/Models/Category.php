@@ -1,16 +1,17 @@
 <?php
+
 namespace App\Models;
 
+use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
+use App\Base\traits\HasRules;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Base\traits\HasRules;
-use Amirhosseinabd\LaravelEasySearch\Eloquent\Traits\Searchable;
 
 class Category extends Model
 {
-    use Sluggable, HasFactory, SoftDeletes, HasRules, Searchable;
+    use HasFactory, HasRules, Searchable, Sluggable, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -22,7 +23,7 @@ class Category extends Model
     {
         return [
             'slug' => [
-                'source'   => 'name',
+                'source' => 'name',
                 'onUpdate' => true, // اسلاگ را هنگام آپدیت خودکار تغییر دهد
 
             ],
@@ -38,19 +39,21 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
     }
+
     public static function getCategories(): array
     {
-        $array      = [];
+        $array = [];
         $categories = self::query()->with('childCategory')->where('parent_id', 0)->get();
         foreach ($categories as $category1) {
             $array[$category1->id] = $category1->name;
             foreach ($category1->childCategory as $category2) {
-                $array[$category2->id] = '-' . $category2->name;
+                $array[$category2->id] = '-'.$category2->name;
                 foreach ($category2->childCategory as $category3) {
-                    $array[$category3->id] = '--' . $category3->name;
+                    $array[$category3->id] = '--'.$category3->name;
                 }
             }
         }
+
         return $array;
 
     }
@@ -70,13 +73,14 @@ class Category extends Model
     {
         return $this->hasMany(Article::class);
     }
+
     public function articleCount($category_id): int
     {
         return Article::query()->where('category_id', $category_id)->count();
     }
 
     protected static $rules = [
-        'name'      => ['required', 'string', 'min:1', 'max:255'],
+        'name' => ['required', 'string', 'min:1', 'max:255'],
         'parent_id' => ['nullable', 'integer'],
     ];
 }

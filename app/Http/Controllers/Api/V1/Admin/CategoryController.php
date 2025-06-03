@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Http\ApiRequests\Admin\Category\CategoryStoreApiRequest;
+use App\Http\ApiRequests\Admin\Category\CategoryUpdateApiRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Category\CategoriesListApiResource;
+use App\Http\Resources\Admin\Category\CategoryDetailsApiResource;
 use App\Models\Category;
 use App\RestfulApi\Facades\ApiResponse;
 use App\Services\CategoryService;
-use App\Http\ApiRequests\Admin\Category\CategoryStoreApiRequest;
-use App\Http\ApiRequests\Admin\Category\CategoryUpdateApiRequest;
-use App\Http\Resources\Admin\Category\CategoriesListApiResource;
-use App\Http\Resources\Admin\Category\CategoryDetailsApiResource;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function __construct(private CategoryService $categoryService)
-    {
-    }
+    public function __construct(private CategoryService $categoryService) {}
 
     /**
      * Display a listing of the resource.
@@ -25,7 +23,7 @@ class CategoryController extends Controller
     {
         $result = $this->categoryService->getAllCategories($request->all());
 
-        if (!$result->ok) {
+        if (! $result->ok) {
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
@@ -39,7 +37,7 @@ class CategoryController extends Controller
     {
         $result = $this->categoryService->createCategory($request->validated());
 
-        if (!$result->ok) {
+        if (! $result->ok) {
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
@@ -56,7 +54,7 @@ class CategoryController extends Controller
     {
         $result = $this->categoryService->getCategoryInfo($category);
 
-        if (!$result->ok) {
+        if (! $result->ok) {
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
@@ -69,7 +67,7 @@ class CategoryController extends Controller
     public function update(CategoryUpdateApiRequest $request, Category $category)
     {
         $result = $this->categoryService->updateCategory($request->validated(), $category);
-        if (!$result->ok) {
+        if (! $result->ok) {
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 
@@ -86,7 +84,7 @@ class CategoryController extends Controller
     {
         $result = $this->categoryService->deleteCategory($category);
 
-        if (!$result->ok) {
+        if (! $result->ok) {
             return ApiResponse::withMessage('Something is wrong. try again later!')->withStatus(500)->build()->response();
         }
 

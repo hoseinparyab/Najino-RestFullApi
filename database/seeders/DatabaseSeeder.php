@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
 
             // 5. Other seeders
             CategorySeeder::class,
-            ArticleSeeder::class
+            ArticleSeeder::class,
         ]);
     }
 }

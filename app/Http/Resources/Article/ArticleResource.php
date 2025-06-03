@@ -35,8 +35,8 @@ class ArticleResource extends JsonResource
                         'created_at' => $comment->created_at,
                         'user' => [
                             'id' => $comment->user->id,
-                            'name' => $comment->user->name
-                        ]
+                            'name' => $comment->user->name,
+                        ],
                     ];
                 });
             }),

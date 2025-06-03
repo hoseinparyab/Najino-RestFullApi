@@ -9,6 +9,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Schema(
  *     schema="UsersItemSchema",
+ *
  *                          @OA\Property(
  *                              property="id",
  *                              type="integer",

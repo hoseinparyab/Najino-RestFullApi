@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\ApiRequests\Comment;
-use Illuminate\Support\Facades\Gate;
-use App\Models\Comment;
+
 use App\RestfulApi\ApiFormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class CommentApproveApiRequest extends ApiFormRequest
 {
@@ -24,7 +24,7 @@ class CommentApproveApiRequest extends ApiFormRequest
     {
         return [
             'is_approved' => 'required|boolean',
-            'rejection_reason' => 'nullable|string|max:500|required_if:is_approved,false'
+            'rejection_reason' => 'nullable|string|max:500|required_if:is_approved,false',
         ];
     }
 
@@ -39,7 +39,7 @@ class CommentApproveApiRequest extends ApiFormRequest
             'is_approved.required' => 'The approval status is required.',
             'is_approved.boolean' => 'The approval status must be true or false.',
             'rejection_reason.required_if' => 'A rejection reason is required when disapproving a comment.',
-            'rejection_reason.max' => 'The rejection reason cannot exceed 500 characters.'
+            'rejection_reason.max' => 'The rejection reason cannot exceed 500 characters.',
         ];
     }
 
@@ -52,7 +52,7 @@ class CommentApproveApiRequest extends ApiFormRequest
     {
         return [
             'is_approved' => 'approval status',
-            'rejection_reason' => 'rejection reason'
+            'rejection_reason' => 'rejection reason',
         ];
     }
 }

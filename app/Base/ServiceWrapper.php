@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Base;
 
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -6,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceWrapper
 {
-    public function __invoke(\Closure $action, \Closure $reject = null)
+    public function __invoke(\Closure $action, ?\Closure $reject = null)
     {
         DB::beginTransaction();
         try {
@@ -16,6 +17,7 @@ class ServiceWrapper
             DB::rollBack();
             ! is_null($reject) && $reject();
             app()[ExceptionHandler::class]->report($th);
+
             return new ServiceResult(false, $th->getMessage());
         }
 

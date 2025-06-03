@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Base\ServiceResult;
 use App\Base\ServiceWrapper;
-use App\Models\Contact;
 use App\Http\Resources\Contact\ContactResource;
+use App\Models\Contact;
 
 class ContactService
 {
@@ -32,6 +32,7 @@ class ContactService
     {
         return app(ServiceWrapper::class)(function () use ($contact) {
             $contact->delete();
+
             return true;
         });
     }

@@ -12,8 +12,8 @@ class RestfulApiServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-       $this->app->bind('apiResponse', function ($app) {
-            return new ApiResponseBuilder();
+        $this->app->bind('apiResponse', function ($app) {
+            return new ApiResponseBuilder;
         });
     }
 

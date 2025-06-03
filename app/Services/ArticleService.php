@@ -1,11 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use App\Base\ServiceResult;
 use App\Base\ServiceWrapper;
 use App\Models\Article;
-use App\SearchOptions\ArticleAuthorSearchOptions;
-use App\SearchOptions\ArticleSearchOptions;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -25,6 +24,7 @@ class ArticleService
     {
         return app(ServiceWrapper::class)(function () use ($article) {
             $article->load(['user', 'category', 'comments.user']);
+
             return $article;
         });
     }
@@ -35,9 +35,9 @@ class ArticleService
             // Handle image upload
             if (isset($inputs['image'])) {
                 $image = $inputs['image'];
-                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                $imageName = time().'_'.Str::random(10).'.'.$image->getClientOriginalExtension();
                 $image->storeAs('public/articles', $imageName);
-                $inputs['image'] = 'articles/' . $imageName;
+                $inputs['image'] = 'articles/'.$imageName;
             }
 
             $inputs['user_id'] = auth()->id();
@@ -55,13 +55,13 @@ class ArticleService
             if (isset($inputs['image'])) {
                 // Delete old image
                 if ($article->image) {
-                    Storage::delete('public/' . $article->image);
+                    Storage::delete('public/'.$article->image);
                 }
 
                 $image = $inputs['image'];
-                $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                $imageName = time().'_'.Str::random(10).'.'.$image->getClientOriginalExtension();
                 $image->storeAs('public/articles', $imageName);
-                $inputs['image'] = 'articles/' . $imageName;
+                $inputs['image'] = 'articles/'.$imageName;
             }
 
             if (isset($inputs['title'])) {
@@ -69,6 +69,7 @@ class ArticleService
             }
 
             $article->update($inputs);
+
             return $article;
         });
     }
@@ -78,7 +79,7 @@ class ArticleService
         return app(ServiceWrapper::class)(function () use ($article) {
             // Delete associated image
             if ($article->image) {
-                Storage::delete('public/' . $article->image);
+                Storage::delete('public/'.$article->image);
             }
 
             return $article->delete();
