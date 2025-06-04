@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 // Home routes
 Route::get('/home/articles', [HomeController::class, 'index']);
 Route::get('/home/articles/{article}', [HomeController::class, 'show']);
+// FAQ routes
+Route::get('/faqs', [HomeController::class, 'faqs']);
 
 // Portfolio routes
 Route::get('/portfolios', [HomeController::class, 'portfolios']);
@@ -20,7 +22,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 // Contact routes
 Route::post('/contact', [ContactController::class, 'store']);
-
 
 
 // Protected routes

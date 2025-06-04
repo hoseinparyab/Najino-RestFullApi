@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\ArticleController;
 use App\Http\Controllers\Api\V1\Admin\AssignRoleToUserController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
+use App\Http\Controllers\Api\V1\Admin\FAQController;
 use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AuthController;
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('users/{user}/assign-roles', AssignRoleToUserController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('articles', ArticleController::class);
+    Route::apiResource('faqs', FAQController::class);
 
     // Portfolio admin routes
     Route::get('/portfolios', [PortfolioController::class, 'index']);

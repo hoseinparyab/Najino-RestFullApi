@@ -44,6 +44,12 @@ class PermissionSeeder extends Seeder
         Permission::createIfNotExists('portfolio_update', 'Portfolio Update');
         Permission::createIfNotExists('portfolio_delete', 'Portfolio Delete');
 
+        // FAQ permissions
+        Permission::createIfNotExists('faq_read', 'FAQ Read');
+        Permission::createIfNotExists('faq_create', 'FAQ Create');
+        Permission::createIfNotExists('faq_update', 'FAQ Update');
+        Permission::createIfNotExists('faq_delete', 'FAQ Delete');
+
         // Comment permissions
         Permission::createIfNotExists('comment_delete', 'Comment Delete');
 
