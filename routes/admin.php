@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Portfolio admin routes
     Route::get('/portfolios', [PortfolioController::class, 'index']);
+    Route::get('/portfolios/{portfolio}', [PortfolioController::class, 'show']);
     Route::post('/portfolios', [PortfolioController::class, 'store']);
     Route::put('/portfolios/{portfolio}', [PortfolioController::class, 'update']);
     Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy']);
