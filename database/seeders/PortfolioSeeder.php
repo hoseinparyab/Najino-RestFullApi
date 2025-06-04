@@ -20,11 +20,7 @@ class PortfolioSeeder extends Seeder
                 'site_address' => 'https://digikala.com',
                 'our_job' => 'طراحی و توسعه کامل پروژه',
                 'cover_image' => 'portfolios/digikala-cover.jpg',
-                'images' => [
-                    'portfolios/digikala-1.jpg',
-                    'portfolios/digikala-2.jpg',
-                    'portfolios/digikala-3.jpg'
-                ]
+                'images' => 'portfolios/digikala-1.jpg'
             ],
             [
                 'title' => 'اپلیکیشن اسنپ',
@@ -32,10 +28,7 @@ class PortfolioSeeder extends Seeder
                 'site_address' => 'https://snapp.ir',
                 'our_job' => 'توسعه بک‌اند و API',
                 'cover_image' => 'portfolios/snapp-cover.jpg',
-                'images' => [
-                    'portfolios/snapp-1.jpg',
-                    'portfolios/snapp-2.jpg'
-                ]
+                'images' => 'portfolios/snapp-1.jpg'
             ],
             [
                 'title' => 'سایت شرکتی ایران‌خودرو',
@@ -43,12 +36,7 @@ class PortfolioSeeder extends Seeder
                 'site_address' => 'https://ikco.ir',
                 'our_job' => 'طراحی UI/UX و توسعه فرانت‌اند',
                 'cover_image' => 'portfolios/ikco-cover.jpg',
-                'images' => [
-                    'portfolios/ikco-1.jpg',
-                    'portfolios/ikco-2.jpg',
-                    'portfolios/ikco-3.jpg',
-                    'portfolios/ikco-4.jpg'
-                ]
+                'images' => 'portfolios/ikco-1.jpg'
             ]
         ];
 
@@ -60,13 +48,11 @@ class PortfolioSeeder extends Seeder
                 file_get_contents(base_path('public/sample-images/placeholder.jpg'))
             );
 
-            // Create portfolio images
-            foreach ($portfolio['images'] as $image) {
-                Storage::disk('public')->put(
-                    $image,
-                    file_get_contents(base_path('public/sample-images/placeholder.jpg'))
-                );
-            }
+            // Create portfolio image
+            Storage::disk('public')->put(
+                $portfolio['images'],
+                file_get_contents(base_path('public/sample-images/placeholder.jpg'))
+            );
 
             // Create portfolio record
             Portfolio::create($portfolio);

@@ -19,28 +19,31 @@ class Portfolio extends Model
         'our_job'
     ];
 
-    protected $casts = [
-        'images' => 'array'
-    ];
+    // Remove the JSON cast as we're storing images as a string
+    // protected $casts = [
+    //     'images' => 'array'
+    // ];
 
-    public function getImagesAttribute($value)
-    {
-        return json_decode($value);
-    }
+    // Remove the accessor as we're storing images as a simple string
+    // public function getImagesAttribute($value)
+    // {
+    //     return json_decode($value);
+    // }
+
 
     public function setImagesAttribute($value)
     {
-        $this->attributes['images'] = json_encode($value);
+        $this->attributes['images'] = $value;
     }
 
     public function getCoverImageAttribute($value)
     {
-        return json_decode($value);
+        return $value;
     }
 
     public function setCoverImageAttribute($value)
     {
-        $this->attributes['cover_image'] = json_encode($value);
+        $this->attributes['cover_image'] = $value;
     }
 
 }

@@ -20,25 +20,27 @@ class PortfolioService
     public function createPortfolio(array $inputs): ServiceResult
     {
         return app(ServiceWrapper::class)(function () use ($inputs) {
+            $storagePath = 'portfolios/' . date('Y/m/d');
+            
+            // Create directory if not exists
+            if (!Storage::disk('public')->exists($storagePath)) {
+                Storage::disk('public')->makeDirectory($storagePath, 0755, true);
+            }
+
             // Handle cover image upload
             if (isset($inputs['cover_image']) && $inputs['cover_image']->isValid()) {
                 $coverImage = $inputs['cover_image'];
-                $coverImageName = time().'_cover_'.Str::random(10).'.'.$coverImage->getClientOriginalExtension();
-                $coverImage->storeAs('public/portfolios', $coverImageName);
-                $inputs['cover_image'] = 'portfolios/'.$coverImageName;
+                $coverImageName = 'cover_' . time() . '_' . Str::random(10) . '.' . $coverImage->getClientOriginalExtension();
+                $coverImagePath = $coverImage->storeAs('public/' . $storagePath, $coverImageName);
+                $inputs['cover_image'] = str_replace('public/', '', $coverImagePath);
             }
 
-            // Handle multiple images upload
-            if (isset($inputs['images']) && is_array($inputs['images'])) {
-                $imagesPaths = [];
-                foreach ($inputs['images'] as $image) {
-                    if ($image->isValid()) {
-                        $imageName = time().'_'.Str::random(10).'.'.$image->getClientOriginalExtension();
-                        $image->storeAs('public/portfolios', $imageName);
-                        $imagesPaths[] = 'portfolios/'.$imageName;
-                    }
-                }
-                $inputs['images'] = $imagesPaths;
+            // Handle single image upload
+            if (isset($inputs['images']) && $inputs['images']->isValid()) {
+                $image = $inputs['images'];
+                $imageName = 'image_' . time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('public/' . $storagePath, $imageName);
+                $inputs['images'] = str_replace('public/', '', $imagePath);
             }
 
             return Portfolio::create($inputs);
@@ -48,6 +50,13 @@ class PortfolioService
     public function updatePortfolio(array $inputs, Portfolio $portfolio): ServiceResult
     {
         return app(ServiceWrapper::class)(function () use ($inputs, $portfolio) {
+            $storagePath = 'portfolios/' . date('Y/m/d');
+            
+            // Create directory if not exists
+            if (!Storage::disk('public')->exists($storagePath)) {
+                Storage::disk('public')->makeDirectory($storagePath, 0755, true);
+            }
+
             // Handle cover image update
             if (isset($inputs['cover_image']) && $inputs['cover_image']->isValid()) {
                 // Delete old cover image
@@ -56,29 +65,25 @@ class PortfolioService
                 }
                 
                 $coverImage = $inputs['cover_image'];
-                $coverImageName = time().'_cover_'.Str::random(10).'.'.$coverImage->getClientOriginalExtension();
-                $coverImage->storeAs('public/portfolios', $coverImageName);
-                $inputs['cover_image'] = 'portfolios/'.$coverImageName;
+                $coverImageName = 'cover_'.time().'_'.Str::random(10).'.'.$coverImage->getClientOriginalExtension();
+                $coverImagePath = $coverImage->storeAs('public/' . $storagePath, $coverImageName);
+                $inputs['cover_image'] = str_replace('public/', '', $coverImagePath);
             }
 
-            // Handle multiple images update
-            if (isset($inputs['images']) && is_array($inputs['images'])) {
-                // Delete old images
+            // Handle single image update
+            if (isset($inputs['images'])) {
+                // Delete old image if exists
                 if ($portfolio->images) {
-                    foreach ($portfolio->images as $oldImage) {
-                        Storage::delete('public/'.$oldImage);
-                    }
+                    Storage::delete('public/'.$portfolio->images);
                 }
-
-                $imagesPaths = [];
-                foreach ($inputs['images'] as $image) {
-                    if ($image->isValid()) {
-                        $imageName = time().'_'.Str::random(10).'.'.$image->getClientOriginalExtension();
-                        $image->storeAs('public/portfolios', $imageName);
-                        $imagesPaths[] = 'portfolios/'.$imageName;
-                    }
+                
+                // Upload new image
+                if ($inputs['images']->isValid()) {
+                    $image = $inputs['images'];
+                    $imageName = 'image_'.time().'_'.Str::random(10).'.'.$image->getClientOriginalExtension();
+                    $imagePath = $image->storeAs('public/' . $storagePath, $imageName);
+                    $inputs['images'] = str_replace('public/', '', $imagePath);
                 }
-                $inputs['images'] = $imagesPaths;
             }
 
             $portfolio->update($inputs);
@@ -92,17 +97,35 @@ class PortfolioService
             // Delete cover image
             if ($portfolio->cover_image) {
                 Storage::delete('public/'.$portfolio->cover_image);
+                $this->removeEmptyDirectory(dirname($portfolio->cover_image));
             }
 
-            // Delete all portfolio images
+            // Delete portfolio image (if exists)
             if ($portfolio->images) {
-                foreach ($portfolio->images as $image) {
-                    Storage::delete('public/'.$image);
-                }
+                Storage::delete('public/'.$portfolio->images);
+                $this->removeEmptyDirectory(dirname($portfolio->images));
             }
 
             return $portfolio->delete();
         });
+    }
+    
+    /**
+     * Remove empty directory after file deletion
+     */
+    protected function removeEmptyDirectory(string $directory): void
+    {
+        $fullPath = storage_path('app/public/' . $directory);
+        
+        // Check if directory exists and is empty
+        if (is_dir($fullPath) && count(scandir($fullPath)) == 2) { // 2 because of . and ..
+            rmdir($fullPath);
+            // Also try to remove parent directory if empty
+            $parentDir = dirname($directory);
+            if ($parentDir !== '.') {
+                $this->removeEmptyDirectory($parentDir);
+            }
+        }
     }
 
     public function getPortfolio(Portfolio $portfolio): ServiceResult
@@ -111,4 +134,5 @@ class PortfolioService
             return $portfolio;
         });
     }
+
 }

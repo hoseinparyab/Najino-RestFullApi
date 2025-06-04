@@ -15,9 +15,8 @@ class StorePortfolioRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'cover_image' => 'required|file|image|max:3000',
-            'images' => 'required|array',
-            'images.*' => 'file|image|max:3000',
+            'cover_image' => 'required|image|max:3000|mimes:jpeg,png,jpg,gif,svg',
+            'images' => 'required|image|max:3000|mimes:jpeg,png,jpg,gif,svg',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'site_address' => 'nullable|string|url',
@@ -29,14 +28,13 @@ class StorePortfolioRequest extends ApiFormRequest
     {
         return [
             'cover_image.required' => 'A cover image is required.',
-            'cover_image.file' => 'The cover image must be a file.',
             'cover_image.image' => 'The cover image must be an image file.',
             'cover_image.max' => 'The cover image cannot be larger than 3MB.',
-            'images.required' => 'At least one portfolio image is required.',
-            'images.array' => 'Portfolio images must be provided as an array.',
-            'images.*.file' => 'Each portfolio image must be a file.',
-            'images.*.image' => 'Each portfolio image must be an image file.',
-            'images.*.max' => 'Each portfolio image cannot be larger than 3MB.',
+            'cover_image.mimes' => 'The cover image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'images.required' => 'Portfolio image is required.',
+            'images.image' => 'The portfolio image must be an image file.',
+            'images.max' => 'The portfolio image cannot be larger than 3MB.',
+            'images.mimes' => 'The portfolio image must be a file of type: jpeg, png, jpg, gif, svg.',
             'title.required' => 'A title is required.',
             'title.max' => 'The title cannot be longer than 255 characters.',
             'site_address.url' => 'The site address must be a valid URL.'

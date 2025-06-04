@@ -15,9 +15,8 @@ class UpdatePortfolioRequest extends ApiFormRequest
     public function rules(): array
     {
         return [
-            'cover_image' => 'sometimes|file|image|max:2048',
-            'images' => 'sometimes|array',
-            'images.*' => 'file|image|max:2048',
+            'cover_image' => 'sometimes|image|max:3000|mimes:jpeg,png,jpg,gif,svg',
+            'images' => 'sometimes|string',
             'title' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
             'site_address' => 'nullable|string|url',
@@ -28,13 +27,9 @@ class UpdatePortfolioRequest extends ApiFormRequest
     public function messages(): array
     {
         return [
-            'cover_image.file' => 'The cover image must be a file.',
             'cover_image.image' => 'The cover image must be an image file.',
-            'cover_image.max' => 'The cover image cannot be larger than 2MB.',
-            'images.array' => 'Portfolio images must be provided as an array.',
-            'images.*.file' => 'Each portfolio image must be a file.',
-            'images.*.image' => 'Each portfolio image must be an image file.',
-            'images.*.max' => 'Each portfolio image cannot be larger than 2MB.',
+            'cover_image.max' => 'The cover image cannot be larger than 3MB.',
+            'cover_image.mimes' => 'The cover image must be a file of type: jpeg, png, jpg, gif, svg.',
             'title.max' => 'The title cannot be longer than 255 characters.',
             'site_address.url' => 'The site address must be a valid URL.'
         ];

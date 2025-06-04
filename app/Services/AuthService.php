@@ -5,72 +5,129 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthService
 {
+    /**
+     * Register a new user and generate API token
+     *
+     * @param array $data
+     * @return array
+     */
     public function register(array $data): array
     {
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return DB::transaction(function () use ($data) {
+            $user = User::create([
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
 
-        // Create a token for the user
-        $token = $user->createToken('auth_token')->plainTextToken;
+            // Create API token with 30 days expiration
+            $tokenResult = $user->createToken('auth_token', ['*'], now()->addDays(30));
+            $token = $tokenResult->plainTextToken;
+            $tokenModel = $tokenResult->accessToken;
 
-        // Store token in remember_token
-        $user->remember_token = $token;
-        $user->save();
+            // Store token in remember_token
+            $user->remember_token = $token;
+            $user->save();
 
-        // Debugging: Check if the token is set
-        \Log::info('Token created during registration: '.$token);
+            \Log::info('User registered successfully', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'token_id' => $tokenModel->id
+            ]);
 
-        return [
-            'user' => $user,
-            'token' => $token,
-        ];
+            return [
+                'user' => $user,
+                'token' => $token,
+                'expires_at' => $tokenModel->expires_at,
+                'token_model' => $tokenModel,
+            ];
+        });
     }
 
-    public function login(array $credentials): array
+    /**
+     * Login user and generate new API token (deletes all existing tokens)
+     *
+     * @param array $credentials
+     * @param bool $remember
+     * @return array
+     */
+    public function login(array $credentials, bool $remember = false): array
     {
-        if (! Auth::attempt($credentials)) {
+        if (!Auth::attempt($credentials, $remember)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
         $user = User::where('email', $credentials['email'])->firstOrFail();
+        
+        // Delete all existing tokens for security
+        $user->tokens()->delete();
 
-        // Delete expired tokens
-        $this->deleteExpiredTokens($user);
+        // Set token expiration based on remember me
+        $expiration = $remember ? now()->addMonth() : now()->addDays(30);
 
-        // Check for existing valid token (created within last 30 days)
-        $tokenModel = $user->tokens()
-            ->where('name', 'auth_token')
-            ->where(function ($query) {
-                $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
-            })
-            ->latest('created_at')
-            ->first();
+        // Create new API token
+        $tokenResult = $user->createToken('auth_token', ['*'], $expiration);
+        $token = $tokenResult->plainTextToken;
+        $tokenModel = $tokenResult->accessToken;
 
-        if ($tokenModel) {
-            $token = $tokenModel->plainTextToken;
-            $expiresAt = $tokenModel->expires_at;
-        } else {
-            // Delete old tokens if you want to keep only one active token
-            $user->tokens()->where('name', 'auth_token')->delete();
-            $tokenResult = $user->createToken('auth_token', ['*'], now()->addDays(30));
-            $token = $tokenResult->plainTextToken;
-            $expiresAt = now()->addDays(30);
-        }
+        // Update remember_token
+        $user->remember_token = $token;
+        $user->save();
+
+        \Log::info('User logged in', [
+            'user_id' => $user->id,
+            'remember' => $remember,
+            'expires_at' => $expiration->toDateTimeString()
+        ]);
 
         return [
             'user' => $user,
             'token' => $token,
-            'expires_at' => $expiresAt,
+            'expires_at' => $tokenModel->expires_at,
+            'token_model' => $tokenModel,
+        ];
+    }
+
+    /**
+     * Validate token from cookie and authenticate user
+     * 
+     * @param string $token
+     * @return array|null
+     */
+    public function validateToken(string $token): ?array
+    {
+        $parts = explode('|', $token);
+        if (count($parts) !== 2) {
+            return null;
+        }
+
+        $tokenValue = $parts[1];
+        $tokenModel = PersonalAccessToken::findToken($tokenValue);
+
+        if (!$tokenModel || ($tokenModel->expires_at && $tokenModel->expires_at <= now())) {
+            return null;
+        }
+
+        $user = User::find($tokenModel->tokenable_id);
+        if (!$user) {
+            return null;
+        }
+
+        Auth::login($user);
+
+        return [
+            'user' => $user,
+            'token' => $token,
+            'token_model' => $tokenModel,
         ];
     }
 
