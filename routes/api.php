@@ -1,15 +1,20 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BlogController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\HomeController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Home routes
+// Home routes - show only 4 latest articles
 Route::get('/home/articles', [HomeController::class, 'index']);
-Route::get('/home/articles/{article}', [HomeController::class, 'show']);
+
+// Blog routes - show all articles with pagination and latest articles
+Route::get('/blog/articles', [BlogController::class, 'index']);
+Route::get('/blog/articles/latest', [BlogController::class, 'latest']);
+Route::get('/blog/articles/{article}', [BlogController::class, 'show']);
 // FAQ routes
 Route::get('/faqs', [HomeController::class, 'faqs']);
 

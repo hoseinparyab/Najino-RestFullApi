@@ -13,10 +13,50 @@ class ArticleService
     public function getAllArticles(array $inputs): ServiceResult
     {
         return app(ServiceWrapper::class)(function () use ($inputs) {
-            return Article::with(['user', 'category'])
-                ->search($inputs['search'] ?? null)
-                ->latest()
-                ->paginate(10);
+            $perPage = max(1, (int) ($inputs['per_page'] ?? 10));
+            $page = max(1, (int) ($inputs['page'] ?? 1));
+            
+            $query = Article::with(['user', 'category'])
+                ->when(isset($inputs['category_id']), function ($q) use ($inputs) {
+                    $q->where('category_id', $inputs['category_id']);
+                });
+                
+            // Apply search if provided
+            if (!empty($inputs['search'])) {
+                $query->where('title', 'like', '%' . $inputs['search'] . '%');
+            }
+            
+            // Get the total count
+            $total = $query->count();
+            
+            // If no results, return empty collection with pagination info
+            if ($total === 0) {
+                return new \Illuminate\Pagination\LengthAwarePaginator(
+                    collect([]),
+                    0,
+                    $perPage,
+                    $page,
+                    ['path' => '']
+                );
+            }
+            
+            // Calculate pagination
+            $lastPage = max(1, (int) ceil($total / $perPage));
+            $page = min($page, $lastPage);
+            
+            // Get the results
+            $items = $query->latest()
+                         ->skip(($page - 1) * $perPage)
+                         ->take($perPage)
+                         ->get();
+            
+            return new \Illuminate\Pagination\LengthAwarePaginator(
+                $items,
+                $total,
+                $perPage,
+                $page,
+                ['path' => '']
+            );
         });
     }
 
@@ -83,6 +123,16 @@ class ArticleService
             }
 
             return $article->delete();
+        });
+    }
+
+    public function getLatestArticles(int $count = 4): ServiceResult
+    {
+        return app(ServiceWrapper::class)(function () use ($count) {
+            return Article::with(['user', 'category'])
+                ->latest()
+                ->take($count)
+                ->get();
         });
     }
 }
