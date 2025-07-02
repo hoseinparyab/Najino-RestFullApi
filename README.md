@@ -2,6 +2,9 @@
 
 <div align="center">
 <a href='https://postimages.org/' target='_blank'><img src='https://i.postimg.cc/9fhYzyyZ/najinoo.jpg' border='0' alt='najinoo'/></a>  
+    <br>
+    <br>
+    <br>
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Status: Development">
     <img src="https://img.shields.io/badge/Access-Private-red" alt="Access: Private">
