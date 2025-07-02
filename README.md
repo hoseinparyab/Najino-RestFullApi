@@ -1,7 +1,7 @@
 # Najino RESTful API
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x200?text=Najino+RESTful+API" alt="Najino API">
+  <img src=["https://via.placeholder.com/800x200?text=Najino+RESTful+API"](https://ibb.co/XZ1pjQFH) alt="Najino API">
   
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Status: Development">
