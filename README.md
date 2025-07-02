@@ -1,8 +1,7 @@
 # Najino RESTful API
 
 <div align="center">
-  <img src=["https://via.placeholder.com/800x200?text=Najino+RESTful+API"](https://ibb.co/XZ1pjQFH) alt="Najino API">
-  
+<a href='https://postimages.org/' target='_blank'><img src='https://i.postimg.cc/9fhYzyyZ/najinoo.jpg' border='0' alt='najinoo'/></a>  
   <p align="center">
     <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Status: Development">
     <img src="https://img.shields.io/badge/Access-Private-red" alt="Access: Private">
