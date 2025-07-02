@@ -3,6 +3,7 @@
 namespace App\Http\ApiRequests\FAQ;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UpdateFAQRequest extends FormRequest
 {

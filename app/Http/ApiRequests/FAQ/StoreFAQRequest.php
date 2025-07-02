@@ -3,6 +3,7 @@
 namespace App\Http\ApiRequests\FAQ;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class StoreFAQRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreFAQRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allow('faq_create');
     }
 
     /**

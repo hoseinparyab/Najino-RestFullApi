@@ -1,23 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Najino RESTful API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
+  <img src="https://via.placeholder.com/800x200?text=Najino+RESTful+API" alt="Najino API">
+  
+  <p align="center">
+    <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Status: Development">
+    <img src="https://img.shields.io/badge/Access-Private-red" alt="Access: Private">
+  </p>
+</div>
 
-## About Laravel
+## Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Notice:** This is a private project owned by Najino Company. The source code is exclusively available to the authorized development team.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Najino is a secure and advanced RESTful API service built on the Laravel framework, developed as a dedicated backend for Najino's systems. The project follows modern MVC architecture and implements current software development standards.
+
+## Key Features
+
+- Authentication using Laravel Sanctum
+- User and role management
+- FAQ system
+- Content and blog management
+- Portfolio management
+- Secure and modern API interfaces
+- Comprehensive API documentation
+- Automated testing
+
+## Prerequisites
+
+- PHP 8.1 or higher
+- Composer
+- MySQL 5.7 or higher / MariaDB 10.3 or higher
+- Node.js 16.x or higher
+- NPM or Yarn
+
+## Installation and Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone [repository-url]
+   cd Najino-RestFullApi
+   ```
+
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
+
+3. **Copy environment file**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+5. **Configure database**
+   Open the `.env` file and set up your database connection:
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=najino
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+6. **Run migrations and seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Install frontend dependencies**
+   ```bash
+   npm install
+   npm run build
+   ```
+
+8. **Set up storage link**
+   ```bash
+   php artisan storage:link
+   ```
+
+## Creating an Admin User
+
+To create a new admin user, use the following command:
+
+```bash
+php artisan make:admin --name="Admin Name" --email="admin@example.com" --password="secure_password"
+```
+
+Or run interactively:
+
+```bash
+php artisan make:admin
+```
+
+## Development Server
+
+To run the project in development mode:
+
+```bash
+# Start the development server
+php artisan serve
+
+# Run Vite for asset compilation
+npm run dev
+```
+
+## Running Tests
+
+To execute the test suite:
+
+```bash
+php artisan test
+```
+
+## Project Structure
+
+- `app/Http/Controllers` - Application controllers
+- `app/Models` - Database models
+- `app/Http/Requests` - Validation classes
+- `app/Http/Resources` - API resources
+- `app/Services` - Business logic services
+- `database/migrations` - Database migrations
+- `database/seeders` - Seed data
+- `routes` - Route definitions
+
+## Ownership and Rights
+
+All intellectual property rights for this software are owned by Najino Company. This is proprietary software and is not released under any public license.
+
+## Access Policy
+
+- This project is developed exclusively for Najino Company.
+- Any use, copying, or distribution of the source code without written permission from Najino Company is strictly prohibited.
+- Access to the code repository is restricted to authorized development team members only.
+
+## Contact Information
+
+- Email: [info@najino.ir](mailto:info@najino.ir)
+- Website: [https://najino.ir](https://najino.ir)
+- Phone: +98-21-88000000
+
+## Development Team
+
+This project is developed and maintained by Najino Company's software development team.
+
+## Acknowledgments
+
+Special thanks to all members of Najino's IT and development team who have contributed to this project.
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
