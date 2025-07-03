@@ -2,7 +2,6 @@
 
 namespace App\Http\ApiRequests\Admin\Article;
 
-use App\Models\Article;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,7 +12,7 @@ class ArticleIndexApiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Temporarily allow access for testing
+        return true;
     }
 
     /**
@@ -23,11 +22,14 @@ class ArticleIndexApiRequest extends FormRequest
      */
     public function rules(): array
     {
-        return Article::rules([
+        return [
             'search' => 'nullable|string',
             'category_id' => 'nullable|exists:categories,id',
             'per_page' => 'nullable|integer|min:1|max:100',
             'page' => 'nullable|integer|min:1',
-        ]);
+            'is_active' => 'nullable|boolean',
+            'sort_by' => 'nullable|string|in:title,created_at,view_count',
+            'sort_order' => 'nullable|string|in:asc,desc',
+        ];
     }
 }
