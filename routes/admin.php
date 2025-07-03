@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login/admin', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'api'])->prefix('api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('roles', RoleController::class);
