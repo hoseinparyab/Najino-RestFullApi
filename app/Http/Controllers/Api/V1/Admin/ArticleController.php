@@ -34,7 +34,7 @@ class ArticleController extends Controller
 
             if (! $result->ok) {
                 return ApiResponse::withMessage('Failed to fetch articles')->withStatus(500)->build()->response();
-            }
+            } 
 
             return ApiResponse::withData(ArticlesListApiResource::collection($result->data))->build()->response();
         } catch (Throwable $th) {

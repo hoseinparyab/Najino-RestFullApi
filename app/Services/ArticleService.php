@@ -15,20 +15,20 @@ class ArticleService
         return app(ServiceWrapper::class)(function () use ($inputs) {
             $perPage = max(1, (int) ($inputs['per_page'] ?? 10));
             $page = max(1, (int) ($inputs['page'] ?? 1));
-            
+
             $query = Article::with(['user', 'category'])
                 ->when(isset($inputs['category_id']), function ($q) use ($inputs) {
                     $q->where('category_id', $inputs['category_id']);
                 });
-                
+
             // Apply search if provided
             if (!empty($inputs['search'])) {
                 $query->where('title', 'like', '%' . $inputs['search'] . '%');
             }
-            
+
             // Get the total count
             $total = $query->count();
-            
+
             // If no results, return empty collection with pagination info
             if ($total === 0) {
                 return new \Illuminate\Pagination\LengthAwarePaginator(
@@ -39,17 +39,17 @@ class ArticleService
                     ['path' => '']
                 );
             }
-            
+
             // Calculate pagination
             $lastPage = max(1, (int) ceil($total / $perPage));
             $page = min($page, $lastPage);
-            
+
             // Get the results
             $items = $query->latest()
                          ->skip(($page - 1) * $perPage)
                          ->take($perPage)
                          ->get();
-            
+
             return new \Illuminate\Pagination\LengthAwarePaginator(
                 $items,
                 $total,
